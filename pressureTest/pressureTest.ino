@@ -12,8 +12,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int p4 = analogRead(PIN_PRESSURE4);
-  Serial.println(p4);
+  float p4 = analogRead(PIN_PRESSURE4);
+  float pressure = map(p4, 620.6, 5585.5, 0, 7500);
+  Serial.println(pressure);
   delay(1000);
 }
 

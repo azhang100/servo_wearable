@@ -13,6 +13,7 @@
 #define PIN_PRESSURE2 PA5
 #define PIN_PRESSURE3 PA6
 #define PIN_PRESSURE4 PA7
+#define senseVoltage PA0
 
 float heaterVal = 0;
 float pumpVal = 0;
@@ -52,9 +53,22 @@ void loopAnalog() {
   SLOWPRINT4NL("p1:", p1, ",p2:", p2); SLOWPRINT4(", p3:", p3, ",p4:", p4);
 }
 
+float measureVoltage() {
+  float voltage = analogRead(senseVoltage);
+  voltage = (2 * 3.3 * voltage)/4096;
+  return voltage;
+}
+
 void measureChamberPressure() {
-  pressure = analogRead(PIN_PRESSURE4);
-  pressure = map(pressure, 620.6, 5585.5, 0, 7500);
+  float pressureMilliVolts = analogRead(PIN_PRESSURE4)*3300/4096;
+  Serial.println(pressureMilliVolts);
+  float voltage = measureVoltage();
+  Serial.println(voltage);
+  float maxVol = 0.9 * voltage*1000;
+  Serial.println(maxVol);
+  float minVol = 0.1 * voltage*1000;
+  Serial.println(minVol);
+  pressure = map(pressureMilliVolts, minVol, maxVol, 0, 7500);
   sendCommand("pressureChamber", String(pressure));
 }
 

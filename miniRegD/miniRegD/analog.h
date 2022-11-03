@@ -61,13 +61,9 @@ float measureVoltage() {
 
 void measureChamberPressure() {
   float pressureMilliVolts = analogRead(PIN_PRESSURE4)*3300/4096;
-  Serial.println(pressureMilliVolts);
-  float voltage = measureVoltage();
-  Serial.println(voltage);
+  float voltage = 5; //measureVoltage();
   float maxVol = 0.9 * voltage*1000;
-  Serial.println(maxVol);
   float minVol = 0.1 * voltage*1000;
-  Serial.println(minVol);
   pressure = map(pressureMilliVolts, minVol, maxVol, 0, 7500);
   sendCommand("pressureChamber", String(pressure));
 }

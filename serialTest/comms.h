@@ -11,7 +11,7 @@
 
 //=======================Serial choose==================
 
-#define BTSERIAL Serial2// long-range comms
+#define BTSERIAL Serial1// long-range comms
 #define IS_SERIAL_DIRECT BTSERIAL == DBSERIAL
 
 //=======================================================
@@ -25,10 +25,11 @@ void loopComms() {};
 
 void setupComms() {
   PRINT1("setting up comms");
-  DBSERIAL.println("set up BT");
-  BTSERIAL.begin(9600);
-  BTSERIAL.println("btSerial online");
-  
+  if (IS_SERIAL_DIRECT == false) {
+    DBSERIAL.println("set up BT");
+    BTSERIAL.begin(9600);
+    BTSERIAL.println("btSerial online");
+  }
   PRINT1("done");
 }
 
@@ -38,12 +39,14 @@ void sendCommand(const String& command, const String& arg) {
   BTSERIAL.print(SPLIT_DELIM);
   BTSERIAL.print(arg);
   BTSERIAL.print(END_DELIM);
-  DBSERIAL.print(START_DELIM);
-  DBSERIAL.print(command);
-  DBSERIAL.print(SPLIT_DELIM);
-  DBSERIAL.print(arg);
-  DBSERIAL.print(END_DELIM);
-  
+
+  if (IS_SERIAL_DIRECT == false) {
+    DBSERIAL.print(START_DELIM);
+    DBSERIAL.print(command);
+    DBSERIAL.print(SPLIT_DELIM);
+    DBSERIAL.print(arg);
+    DBSERIAL.print(END_DELIM);
+  }
 }
 
 void acknowledgeCommand(String command, String arg) {

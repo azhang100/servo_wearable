@@ -52,6 +52,7 @@ void loop() {
   measurePumpPWM();
   suggestSweep();
   Serial.println();
+  Serial2.println();
   // loopComms();
   //  loopBlower();
   //  loopAnalog();

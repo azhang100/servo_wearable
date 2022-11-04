@@ -74,17 +74,8 @@ void measuretPressure() {
   sendCommand("tPressure", String(tPressure));
 }
 
-void settPressure() {
-  static String serialBuf = "";
-  while (Serial.available()) {
-    char c = Serial.read();
-    if (c == ']') { // end delim
-      tPressure = serialBuf.toInt();
-      serialBuf = "";
-    } else              {
-      serialBuf += c;
-    }
-  }
+void settPressure(int input) {
+  tPressure = input;
 }
 
 void measureHeaterPWM() {

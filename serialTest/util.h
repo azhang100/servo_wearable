@@ -26,6 +26,21 @@
 #define SLOWPRINT4(a,b,c,d)   if (isSlowPrint){ PRINT4(a,b,c,d); }
 #define SLOWPRINT4NL(a,b,c,d) if (isSlowPrint){ PRINT4NL(a,b,c,d); }
 
+#define DBSERIAL2 Serial1 // other serial
+
+#define PRINT21(a)         DBSERIAL2.println(F(a))
+#define PRINT22(a,b)       DBSERIAL2.print  (F(a)); DBSERIAL2.println(b)
+#define PRINT23(a,b,c)     DBSERIAL2.print  (F(a)); DBSERIAL2.print  (b); DBSERIAL2.println(F(c))
+#define PRINT23NL(a,b,c)   DBSERIAL2.print  (F(a)); DBSERIAL2.print  (b); DBSERIAL2.print(F(c))
+#define PRINT24(a,b,c,d)   DBSERIAL2.print  (F(a)); DBSERIAL2.print  (b); DBSERIAL2.print  (F(c)); DBSERIAL2.println(d)
+#define PRINT24NL(a,b,c,d) DBSERIAL2.print  (F(a)); DBSERIAL2.print  (b); DBSERIAL2.print  (F(c)); DBSERIAL2.print  (d)
+
+#define SLOWPRINT1(a)         if (isSlowPrint){ PRINT1(a); }
+#define SLOWPRINT2(a,b)       if (isSlowPrint){ PRINT2(a,b); }
+#define SLOWPRINT3(a,b,c)     if (isSlowPrint){ PRINT3(a,b,c); }
+#define SLOWPRINT4(a,b,c,d)   if (isSlowPrint){ PRINT4(a,b,c,d); }
+#define SLOWPRINT4NL(a,b,c,d) if (isSlowPrint){ PRINT4NL(a,b,c,d); }
+
 bool isSlowPrint = true;
 
 void resetSlowPrint() {

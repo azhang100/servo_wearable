@@ -5,51 +5,90 @@
 #include <Wire.h>
 
 void checkInput() {
-  static String serialBuf = ""; // change to char[] to increase speed
+  static String inputType = ""; // change to char[] to increase speed
+  static String functionInput = "";
   while (Serial.available()) {
     char c = Serial.read();
     if (c == '[') { // start delim
-      serialBuf = "";
+      inputType = "";
     } else if (c == '=') { // end delim
-      if (serialBuf == "tTemp") {
-        settTemp();
-      }
-      else if (serialBuf == "tPressure") {
-        settPressure();
-      }
-      else if (serialBuf == "tegco2") {
-        settegco2();
-      }
-      else {
-        PRINT2("ERROR: INVALID INPUT", serialBuf);
-      }
+      break;
     } else              {
-      serialBuf += c;
+      inputType += c;
     }
   }
-}
-void checkInput2() {
-  static String serialBuf = ""; // change to char[] to increase speed
-  while (Serial1.available()) {
-    char c = Serial1.read();
-    if (c == '[') { // start delim
-      serialBuf = "";
-    } else if (c == '=') { // end delim
-      if (serialBuf == "tTemp") {
-        settTemp();
-      }
-      else if (serialBuf == "tPressure") {
-        settPressure();
-      }
-      else if (serialBuf == "tegco2") {
-        settegco2();
-      }
-      else {
-        PRINT2("ERROR: INVALID INPUT", serialBuf);
-      }
-    } else              {
-      serialBuf += c;
+  while (Serial.available()) {
+    char c = Serial.read();
+    if (c != ']') { // end delim
+      functionInput += c;
     }
+  }
+  if (inputType == "tTemp") {
+    settTemp(functionInput.toInt());
+    functionInput = "";
+    inputType = "";
+  }
+  else if (inputType == "tPressure") {
+    settPressure(functionInput.toInt());
+    functionInput = "";
+    inputType = "";
+  }
+  else if (inputType == "tegco2") {
+    settegco2(functionInput.toInt());
+    functionInput = "";
+    inputType = "";
+  }
+  else if (inputType == "") {
+
+  }
+  else {
+    PRINT2("ERROR: INVALID INPUT ", inputType);
+    functionInput = "";
+    inputType = "";
+  }
+}
+
+void checkInput2() {
+  static String inputType = ""; // change to char[] to increase speed
+  static String functionInput = "";
+  while (Serial2.available()) {
+    char c = Serial2.read();
+    if (c == '[') { // start delim
+      inputType = "";
+    } else if (c == '=') { // end delim
+      break;
+    } else              {
+      inputType += c;
+    }
+  }
+  while (Serial2.available()) {
+    char c = Serial2.read();
+    if (c != ']') { // end delim
+      functionInput += c;
+    }
+  }
+  if (inputType == "tTemp") {
+    settTemp(functionInput.toInt());
+    functionInput = "";
+    inputType = "";
+  }
+  else if (inputType == "tPressure") {
+    settPressure(functionInput.toInt());
+    functionInput = "";
+    inputType = "";
+  }
+  else if (inputType == "tegco2") {
+    settegco2(functionInput.toInt());
+    functionInput = "";
+    inputType = "";
+  }
+  else if (inputType == "") {
+
+  }
+  else {
+    PRINT2("ERROR: INVALID INPUT ", inputType);
+    functionInput = "";
+    inputType = "";
   }
 }
 

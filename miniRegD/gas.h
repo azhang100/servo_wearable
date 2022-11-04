@@ -75,17 +75,8 @@ void measureTemp() {
   //} else { PRINT1("Error: no temp measurement"); }
 }
 
-void settTemp() {
-  static String serialBuf = "";
-  while (Serial.available()) {
-    char c = Serial.read();
-    if (c == ']') { // end delim
-      tTemp = serialBuf.toInt();
-      serialBuf = "";
-    } else              {
-      serialBuf += c;
-    }
-  }
+void settTemp(int input) {
+  tTemp = input;
 }
 void measuretTemp() {
   sendCommand("tTemp", String(tTemp));
@@ -95,17 +86,8 @@ void checkHeaterPWM() {
   setHeaterPWM(temp, tTemp);
 }
 
-void settegco2() {
-  static String serialBuf = "";
-  while (Serial.available()) {
-    char c = Serial.read();
-    if (c == ']') { // end delim
-      tegco2 = serialBuf.toInt();
-      serialBuf = "";
-    } else              {
-      serialBuf += c;
-    }
-  }
+void settegco2(int input) {
+  tegco2 = input;
 }
 
 void measuretegco2() {

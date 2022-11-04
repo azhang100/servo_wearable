@@ -1,16 +1,16 @@
 /*
- * 
- * @author andrewzhang100@gmail.com
- * 
- * Library: http://dan.drown.org/stm32duino/package_STM32duino_index.json
- * Board: Generic STM32F103C Series
- * Variant: STM32F103C8 (64K Flash)
- * Upload Method: STLink
- * 
- * Instructions: https://circuitdigest.com/microcontroller-projects/
- *     getting-started-with-stm32-blue-pill-development-board-stm32f103c8-using-arduino-ide
- * (But used STLink)
- */
+
+   @author andrewzhang100@gmail.com
+
+   Library: http://dan.drown.org/stm32duino/package_STM32duino_index.json
+   Board: Generic STM32F103C Series
+   Variant: STM32F103C8 (64K Flash)
+   Upload Method: STLink
+
+   Instructions: https://circuitdigest.com/microcontroller-projects/
+       getting-started-with-stm32-blue-pill-development-board-stm32f103c8-using-arduino-ide
+   (But used STLink)
+*/
 
 #include "Arduino.h"
 #include "util.h"
@@ -26,16 +26,16 @@
 void setup() {
   setupUtil();
   setupComms();
-//  setupBlower();
+  //  setupBlower();
   setupAnalog();
-//  setupFlow();
+  //  setupFlow();
   setupGas();
   setupHumidity();
   // setupEEPROM();
 }
 
 void loop() {
-  
+
   loopUtil();
   measureGas();
   measuretegco2();
@@ -53,11 +53,11 @@ void loop() {
   suggestSweep();
   Serial.println();
   // loopComms();
-//  loopBlower();
-//  loopAnalog();
-//  loopFlow();
-//  loopGas();
-//  loopHumidity();
+  //  loopBlower();
+  //  loopAnalog();
+  //  loopFlow();
+  //  loopGas();
+  //  loopHumidity();
   // loopEEPROM();
   delay(1000); // FOR TESTING PURPOSES
 }

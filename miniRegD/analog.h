@@ -55,15 +55,15 @@ void loopAnalog() {
 
 float measureVoltage() {
   float voltage = analogRead(senseVoltage);
-  voltage = (2 * 3.3 * voltage)/4096;
+  voltage = (2 * 3.3 * voltage) / 4096;
   return voltage;
 }
 
 void measureChamberPressure() {
-  float pressureMilliVolts = analogRead(PIN_PRESSURE4)*3300/4096;
+  float pressureMilliVolts = analogRead(PIN_PRESSURE4) * 3300 / 4096;
   float voltage = 5; //measureVoltage();
-  float maxVol = 0.9 * voltage*1000;
-  float minVol = 0.1 * voltage*1000;
+  float maxVol = 0.9 * voltage * 1000;
+  float minVol = 0.1 * voltage * 1000;
   pressure = map(pressureMilliVolts, minVol, maxVol, 0, 7500);
   sendCommand("pressureChamber", String(pressure));
 }

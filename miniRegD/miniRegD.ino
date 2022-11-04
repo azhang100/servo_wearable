@@ -43,6 +43,7 @@ void loop() {
   measureHumidity();
   measureTemp();
   checkInput();
+  checkInput2();
   measuretTemp();
   measuretPressure();
   checkHeaterPWM();

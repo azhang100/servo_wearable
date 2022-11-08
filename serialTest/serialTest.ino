@@ -6,12 +6,8 @@ void setup() {
 }
 
 void loop() {
-  while(Serial.available()){
-    Serial2.write(Serial.read());
-  }
   while(Serial2.available()){
     Serial.write(Serial2.read());
   }
-  
-  delay(2000);
+
 }

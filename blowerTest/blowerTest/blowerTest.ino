@@ -2,6 +2,7 @@
 #include "blower.h"
 #include "util.h"
 #include "flow.h"
+#include "sweep.h"
 
 
 void setup() {
@@ -14,9 +15,11 @@ void setup() {
   delay(1000);
   delay(1000);
   setupFlow();
+  setupSweep();
 }
 
 void loop() {
-  float flow = loopFlow();
-  loopBlower(flow);
+  //float flow = loopFlow();
+  //loopBlower(flow);
+  float egco2 = loopSweep();  
 }

@@ -21,5 +21,5 @@ void setup() {
 void loop() {
   //float flow = loopFlow();
   //loopBlower(flow);
-  float egco2 = loopSweep();  
+  float sweep = loopSweep();  
 }

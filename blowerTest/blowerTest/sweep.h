@@ -7,6 +7,12 @@
 String info = "";
 int numEnds = 0;
 String egco2 = "";
+float setPoint = 30;
+float Kp = 1;
+float Ki = 0.01;
+float currentTime;
+float previousTime;
+float cumError = 0;
 
 void setupSweep(){
   Serial2.begin(9600);
@@ -23,6 +29,15 @@ void getSweep(){
   }
 }
 
+float piSweep(){
+  previousTime = currentTime;
+  currentTime = millis();
+  float elapsedTime = currentTime - previousTime;
+  float error = setPoint - egco2;
+  cumError += error * elapsedTime;
+  float output = Kp * error + Ki * cumError;
+  return output;
+}
 float loopSweep(){
   String newEGCO2;
   while(Serial2.available()){
@@ -36,9 +51,9 @@ float loopSweep(){
       getSweep();
       numEnds = 0;
       info = "";
-      
+      float sweep = piSweep()
     }
   }
-  return egco2.toFloat();
+  return sweep;
 }
 #endif

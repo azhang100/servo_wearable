@@ -12,15 +12,19 @@
 #define PIN_PWM2 PB8
 
 float setPoint = 1;
-float Kp = 0.99999995;
+//PI VALUES WITH PLUGGED HOLE
+//float Kp = 700;
+//float Ki = 0.05;
+float Kp = 15;
 float Ki = 0;
 float currentTime;
 float previousTime;
-float cumError = 0;
+float cumError;
+float firstTime;
 
 void spinBlower(int b1, int b2){
-  digitalWrite(PIN_PWM1, b1);
-  digitalWrite(PIN_PWM2, b2);
+  analogWrite(PIN_PWM1, b1);
+  analogWrite(PIN_PWM2, b2);
 }
 
 void setupBlower(){
@@ -44,18 +48,21 @@ void setupBlower(){
   PRINT1("stop");
   spinBlower(0,0);
   PRINT1("done");
-  float currentTime = millis();
+  firstTime = millis();
+  float currentTime = millis() - firstTime;
   float previousTime = currentTime;
+  float cumError = 0;
 }
 
 void loopBlower(float flow){
-  flow = flow * -1;
+  flow *= -1;
   previousTime = currentTime;
-  currentTime = millis();
+  currentTime = millis() - firstTime;
   float elapsedTime = currentTime - previousTime;
   float error = setPoint - flow;
   cumError += error * elapsedTime;
-  float output = Kp * error; //+ Ki * cumError;
+  float output = (Kp * error) + (Ki * cumError);
+  
   if(output < 0){
     output = 0;
   }
@@ -63,15 +70,6 @@ void loopBlower(float flow){
     output = 255;
   }
   spinBlower(output,0);
-  //delay(3000);
-  //int blow1 = digitalRead(PA8);
-  //int blow2 = digitalRead(PB5);
-  //PRINT3NL(blow1, "   &  ", blow2);
-  //spinBlower(0,255);
-  //blow1 = digitalRead(PA8);
-  //blow2 = digitalRead(PB5);
-  //PRINT3NL(blow1, "   &  ", blow2);
-  //delay(3000);
 }
 
 #endif

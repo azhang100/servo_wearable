@@ -11,11 +11,13 @@ void setup() {
   //Wire.begin();
   delay(1000);
   delay(1000);
-  setupBlower();
-  delay(1000);
-  delay(1000);
   setupFlow();
+  delay(1000);
+  delay(1000);
   setupSweep();
+  delay(1000);
+  delay(1000);
+  setupBlower();
 }
 
 void loop() {

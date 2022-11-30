@@ -48,7 +48,8 @@ void getSweep(){
     i++;
     c = info.charAt(i);
   }
-  Serial.print(info);
+  DBSERIAL.print(info);
+  BTSERIAL.print(info);
 }
 
 float piSweep(){

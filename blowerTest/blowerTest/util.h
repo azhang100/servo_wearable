@@ -12,6 +12,7 @@
 #define SPLIT_DELIM '='
 
 #define DBSERIAL Serial // debugging
+#define BTSERIAL Serial2 //long-range comms
 
 #define PRINT1(a)         DBSERIAL.println(F(a))
 #define PRINT2(a,b)       DBSERIAL.print  (F(a)); DBSERIAL.println(b)

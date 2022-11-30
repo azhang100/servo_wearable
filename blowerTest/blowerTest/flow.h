@@ -31,6 +31,16 @@ void setupFlow(){
   DBSERIAL.println(flowSensor.flowScale);
   DBSERIAL.print("read flow offset: ");
   DBSERIAL.println(flowSensor.flowOffset);
+  DBSERIAL.println();
+  BTSERIAL.print("sensor serial number: ");
+  BTSERIAL.println(flowSensor.serialNumber, HEX);
+  BTSERIAL.print("sensor article number: ");
+  BTSERIAL.println(flowSensor.articleNumber, HEX);
+  BTSERIAL.println();
+  BTSERIAL.print("read scale factor: ");
+  BTSERIAL.println(flowSensor.flowScale);
+  BTSERIAL.print("read flow offset: ");
+  BTSERIAL.println(flowSensor.flowOffset);
   PRINT1("done");
 }
 
@@ -41,10 +51,16 @@ float loopFlow(){
     DBSERIAL.print("flow exceeded sensor limits:  ");
     DBSERIAL.print(flow);
     DBSERIAL.println(" slm");
+    BTSERIAL.print("flow exceeded sensor limits:  ");
+    BTSERIAL.print(flow);
+    BTSERIAL.println(" slm");
   } else {
     DBSERIAL.print("flow : ");
     DBSERIAL.print(flow);
     DBSERIAL.println(" slm");
+    BTSERIAL.print("flow : ");
+    BTSERIAL.print(flow);
+    BTSERIAL.println(" slm");
   }
   return flow;
 }

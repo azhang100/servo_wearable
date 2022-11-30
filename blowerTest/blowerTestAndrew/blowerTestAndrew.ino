@@ -4,11 +4,13 @@
 #include "flow.h"
 #include "sweep.h"
 
-
+float sweepNew = 1; 
+  
 void setup() {
   delay(1000);
   setupUtil();
   //Wire.begin();
+  setupBlower();
   delay(1000);
   delay(1000);
   setupFlow();
@@ -17,11 +19,16 @@ void setup() {
   setupSweep();
   delay(1000);
   delay(1000);
-  setupBlower();
 }
 
 void loop() {
   float flow = loopFlow();
+  checkInput();
   loopBlower(flow);
-  float sweep = loopSweep();  
+  float oldSweep = sweepNew;
+  sweepNew = loopSweep();  
+  if(oldSweep != sweepNew){
+    updateSetPoint(sweepNew);
+  }
+  Serial.println(sweepNew);
 }

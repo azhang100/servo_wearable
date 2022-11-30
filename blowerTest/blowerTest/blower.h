@@ -12,15 +12,21 @@
 #define PIN_PWM2 PB8
 
 float setPoint = 1;
-float Kp = 0.99999995;
-float Ki = 0;
+//PI VALUES WITH PLUGGED HOLE and setpoint 1
+//float Kp = 700;
+//float Ki = 0.05;
+float Kp = 100;
+float Ki = 0.005;
+float Kd = 20000;
 float currentTime;
 float previousTime;
-float cumError = 0;
-
+float cumError;
+float rateError;
+float firstTime;
+float error = 0;
 void spinBlower(int b1, int b2){
-  digitalWrite(PIN_PWM1, b1);
-  digitalWrite(PIN_PWM2, b2);
+  analogWrite(PIN_PWM1, b1);
+  analogWrite(PIN_PWM2, b2);
 }
 
 void setupBlower(){
@@ -44,34 +50,51 @@ void setupBlower(){
   PRINT1("stop");
   spinBlower(0,0);
   PRINT1("done");
-  float currentTime = millis();
+  firstTime = millis();
+  float currentTime = millis() - firstTime;
   float previousTime = currentTime;
+  float cumError = 0;
+}
+
+void setblowerKp(float newKp){
+  Kp = newKp;
+}
+
+void setblowerKi(float newKi){
+  Ki = newKi;
+}
+
+void setblowerKd(float newKd){
+  Kd = newKd;
+}
+
+void updateSetPoint(float newSetPoint){
+  setPoint = newSetPoint;
 }
 
 void loopBlower(float flow){
-  flow = flow * -1;
+  flow *= -1;
   previousTime = currentTime;
-  currentTime = millis();
+  currentTime = millis() - firstTime;
   float elapsedTime = currentTime - previousTime;
-  float error = setPoint - flow;
+  float lastError = error;
+  error = setPoint - flow;
   cumError += error * elapsedTime;
-  float output = Kp * error; //+ Ki * cumError;
+  rateError = (error - lastError)/elapsedTime;
+  float output = (Kp * error) + (Ki * cumError) + (Kd * rateError);
+  
   if(output < 0){
     output = 0;
   }
   else if(output > 255){
     output = 255;
   }
+  //Serial.println(setPoint);
+  //PRINT4("output ", output, "prop. ", Kp*error);
+  //PRINT4("int. ", Ki * cumError, "der. ", Kd * rateError);
   spinBlower(output,0);
-  //delay(3000);
-  //int blow1 = digitalRead(PA8);
-  //int blow2 = digitalRead(PB5);
-  //PRINT3NL(blow1, "   &  ", blow2);
-  //spinBlower(0,255);
-  //blow1 = digitalRead(PA8);
-  //blow2 = digitalRead(PB5);
-  //PRINT3NL(blow1, "   &  ", blow2);
-  //delay(3000);
 }
+
+
 
 #endif

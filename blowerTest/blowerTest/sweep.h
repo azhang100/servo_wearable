@@ -2,20 +2,41 @@
 #define Sweep_h
 
 #include "Arduino.h"
-#include "util.h"
+//#include "util.h"
 
 String info = "";
 int numEnds = 0;
 String egco2 = "";
 float setPointSweep = 30;
 float KpSweep = 1;
-float KiSweep = 0.01;
+float KiSweep = 0;
+float KdSweep = 0;
 float currentTimeSweep;
 float previousTimeSweep;
-float cumErrorSweep = 0;
+float cumErrorSweep;
+float rateErrorSweep;
+float firstTimeSweep;
+float errorSweep = 0;
+float sweep = 1;
 
 void setupSweep(){
   Serial2.begin(9600);
+  firstTimeSweep = millis();
+  float currentTimeSweep = millis() - firstTimeSweep;
+  float previousTimeSweep = currentTimeSweep;
+  float cumError = 0;
+}
+
+void setsweepKp(float newKpSweep){
+  KpSweep = newKpSweep;
+}
+
+void setsweepKi(float newKiSweep){
+  KiSweep = newKiSweep;
+}
+
+void setsweepKd(float newKdSweep){
+  KdSweep = newKdSweep;
 }
 
 void getSweep(){
@@ -34,9 +55,11 @@ float piSweep(){
   previousTimeSweep = currentTimeSweep;
   currentTimeSweep = millis();
   float elapsedTimeSweep = currentTimeSweep - previousTimeSweep;
+  float lastErrorSweep = errorSweep;
   float errorSweep = setPointSweep - egco2.toFloat();
   cumErrorSweep += errorSweep * elapsedTimeSweep;
-  float outputSweep = KpSweep * errorSweep + KiSweep * cumErrorSweep;
+  rateErrorSweep = (errorSweep - lastErrorSweep)/elapsedTimeSweep;
+  float outputSweep = KpSweep * errorSweep + KiSweep * cumErrorSweep + KdSweep * rateErrorSweep;
   return outputSweep;
 }
 float loopSweep(){
@@ -52,10 +75,9 @@ float loopSweep(){
       getSweep();
       numEnds = 0;
       info = "";
-      //float sweep = piSweep()
+      sweep = piSweep();
     }
   }
-  //return sweep;
-  return 0;
+  return sweep;
 }
 #endif

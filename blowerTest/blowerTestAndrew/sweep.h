@@ -13,6 +13,7 @@ float KiSweep = 0.01;
 float currentTimeSweep;
 float previousTimeSweep;
 float cumErrorSweep = 0;
+float sweep = 1;
 
 void setupSweep(){
   Serial2.begin(9600);
@@ -52,10 +53,9 @@ float loopSweep(){
       getSweep();
       numEnds = 0;
       info = "";
-      //float sweep = piSweep()
+      sweep = piSweep();
     }
   }
-  //return sweep;
-  return 0;
+  return sweep;
 }
 #endif

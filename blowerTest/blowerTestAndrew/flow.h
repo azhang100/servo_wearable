@@ -42,9 +42,9 @@ float loopFlow(){
     DBSERIAL.print(flow);
     DBSERIAL.println(" slm");
   } else {
-    DBSERIAL.print("flow : ");
-    DBSERIAL.print(flow);
-    DBSERIAL.println(" slm");
+//    DBSERIAL.print("flow : ");
+//    DBSERIAL.print(flow);
+//    DBSERIAL.println(" slm");
   }
   return flow;
 }

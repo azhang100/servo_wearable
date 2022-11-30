@@ -70,5 +70,4 @@ int analogReadToMillivolt(int n){
   return int(res);
 }
 
-
 #endif

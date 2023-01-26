@@ -7,8 +7,9 @@
 String info = "";
 int numEnds = 0;
 String egco2 = "";
-float setPointSweep = 30;
-float KpSweep = 1;
+float inEGCO2;
+float setPointSweep = 35;
+float KpSweep = .1;
 float KiSweep = 0;
 float KdSweep = 0;
 float currentTimeSweep;
@@ -18,6 +19,10 @@ float rateErrorSweep;
 float firstTimeSweep;
 float errorSweep = 0;
 float sweep = 1;
+float rawLowEGCO2 = 38.2;
+float rawHighEGCO2 = 73.2;
+float referenceLowEGCO2 = 26.7;
+float referenceHighEGCO2 = 59.4;
 
 void setupSweep(){
   Serial2.begin(9600);
@@ -40,16 +45,24 @@ void setsweepKd(float newKdSweep){
 }
 
 void getSweep(){
-  char c = info.charAt(9);
-  int i = 9;
-  egco2 = "";
-  while(c != ']'){
-    egco2 += c;
-    i++;
-    c = info.charAt(i);
+  for(int i = 0; i < info.length() - 1; i++){
+    if(info.charAt(i) == '[' && info.charAt(i+1) == 'e'){
+      egco2 = "";
+      i += 7;
+      while(info.charAt(i) != ']'){
+        egco2 += info.charAt(i);
+        i++;
+      }
+    }
   }
-  DBSERIAL.print(info);
-  BTSERIAL.print(info);
+  DBSERIAL.print("egco2= ");
+  //DBSERIAL.println(egco2);
+  inEGCO2 = egco2.toFloat() * 7.6;
+  //inEGCO2 = ((inEGCO2-rawLowEGCO2)*(referenceHighEGCO2-referenceLowEGCO2))/(rawHighEGCO2-rawLowEGCO2)+referenceLowEGCO2;
+  DBSERIAL.println(inEGCO2);
+  
+  //DBSERIAL.print(info);
+  //BTSERIAL.print(info);
 }
 
 float piSweep(){
@@ -57,10 +70,12 @@ float piSweep(){
   currentTimeSweep = millis();
   float elapsedTimeSweep = currentTimeSweep - previousTimeSweep;
   float lastErrorSweep = errorSweep;
-  float errorSweep = setPointSweep - egco2.toFloat();
-  cumErrorSweep += errorSweep * elapsedTimeSweep;
+  float errorSweep = -setPointSweep + (inEGCO2);
   rateErrorSweep = (errorSweep - lastErrorSweep)/elapsedTimeSweep;
   float outputSweep = KpSweep * errorSweep + KiSweep * cumErrorSweep + KdSweep * rateErrorSweep;
+  if(outputSweep < 0.1){
+    outputSweep = 0.1;
+  }
   return outputSweep;
 }
 float loopSweep(){

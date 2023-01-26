@@ -47,6 +47,7 @@ void resetSlowPrint(){
 void setupUtil(){
   //pinMode(PIN_LED, OUTPUT);
   DBSERIAL.begin(9600); // debugging
+  BTSERIAL.begin(9600);
   delay(1000);
   PRINT1("Debug Serial start");
   Wire.begin();

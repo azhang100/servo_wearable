@@ -25,10 +25,10 @@ void loop() {
   float flow = loopFlow();
   checkInput();
   loopBlower(flow);
-  float oldSweep = sweepNew;
-  sweepNew = loopSweep();  
-  if(oldSweep != sweepNew){
-    updateSetPoint(sweepNew);
-  }
-  Serial.println(sweepNew);
+//  float oldSweep = sweepNew;
+//  sweepNew = loopSweep();  
+//  if(oldSweep != sweepNew){
+//    updateSetPoint(sweepNew);
+//  }
+//  Serial.println(sweepNew);
 }

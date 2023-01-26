@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "util.h"
+#include "flow.h"
 
 
 //ARDUINO CODE
@@ -10,14 +11,16 @@
 //#define PIN_PWM2 10
 #define PIN_PWM1 PB9
 #define PIN_PWM2 PB8
-
-float setPoint = 1;
+int timerBlow = 0;
+float setPoint = 0.5;
 //PI VALUES WITH PLUGGED HOLE and setpoint 1
 //float Kp = 700;
 //float Ki = 0.05;
-float Kp = 100;
+// 100, .005, 20000
+//700, 0, 10000
+float Kp = 800;
 float Ki = 0.005;
-float Kd = 20000;
+float Kd = 1000;
 float currentTime;
 float previousTime;
 float cumError;
@@ -30,35 +33,30 @@ void spinBlower(int b1, int b2){
 }
 
 void setupBlower(){
-  PRINT1("Setting up blower");
-  pinMode(PIN_PWM1, OUTPUT);
-  pinMode(PIN_PWM2, OUTPUT);
-  pinMode(PB15, OUTPUT);
-  pinMode(PB4, OUTPUT);
-  pinMode(PA8, INPUT);
-  pinMode(PB5, INPUT);
-
-  digitalWrite(PB15, HIGH);
-  digitalWrite(PB4, HIGH);
-  
-  PRINT1("blower 1");
-  spinBlower(255,0);
-  delay(3000);
-  PRINT1("blower 2");
-  spinBlower(0,255);
-  delay(3000);
-  PRINT1("stop");
-  spinBlower(0,0);
-  PRINT1("done");
   firstTime = millis();
   float currentTime = millis() - firstTime;
   float previousTime = currentTime;
   float cumError = 0;
 }
+
+void setblowerKp(float newKp){
+  Kp = newKp;
+}
+
+void setblowerKi(float newKi){
+  Ki = newKi;
+}
+
+void setblowerKd(float newKd){
+  Kd = newKd;
+}
+
 void updateSetPoint(float newSetPoint){
   setPoint = newSetPoint;
 }
+
 void loopBlower(float flow){
+  timerBlow++;
   flow *= -1;
   previousTime = currentTime;
   currentTime = millis() - firstTime;
@@ -69,23 +67,27 @@ void loopBlower(float flow){
   rateError = (error - lastError)/elapsedTime;
   float output = (Kp * error) + (Ki * cumError) + (Kd * rateError);
   
-  if(output < 0){
-    output = 0;
+  if(output < 25){
+    output = 25;
   }
   else if(output > 255){
     output = 255;
   }
-  //Serial.println(setPoint);
   //PRINT4("output ", output, "prop. ", Kp*error);
   //PRINT4("int. ", Ki * cumError, "der. ", Kd * rateError);
   spinBlower(output,0);
+  if(timerBlow >= 100){
+        DBSERIAL.print(setPoint);
+        timerBlow = 0;
+      }
 }
+
+
 
 void checkInput() {
   static String input = ""; // change to char[] to increase speed
-  while (Serial.available()) {
-    char c = Serial.read();
-    input += c;
+  if (Serial.available()) {
+    input = Serial.readString();
   }
   if(input != ""){
     setPoint = input.toFloat();

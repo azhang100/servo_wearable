@@ -14,7 +14,7 @@
 #define FLOW_SENSOR_ADDRESS 0x40 // address of sensor, usually 64 or 0x40 by default
 
 SFM3X00 flowSensor(FLOW_SENSOR_ADDRESS); // create insance of sensor with address 
-
+int timer = 0;
 void setupFlow(){
   PRINT1("setting up flow");
   Wire.begin();
@@ -45,6 +45,7 @@ void setupFlow(){
 }
 
 float loopFlow(){
+  timer++;
   float flow = flowSensor.readFlow(); // read flow from sensor and print
 
   if(flowSensor.checkRange(flow)){
@@ -55,12 +56,16 @@ float loopFlow(){
     BTSERIAL.print(flow);
     BTSERIAL.println(" slm");
   } else {
-    DBSERIAL.print("flow : ");
-    DBSERIAL.print(flow);
-    DBSERIAL.println(" slm");
-    BTSERIAL.print("flow : ");
-    BTSERIAL.print(flow);
-    BTSERIAL.println(" slm");
+//    DBSERIAL.print("flow : ");
+      if(timer >= 100){
+        //DBSERIAL.println(flow * -1);
+        timer = 0;
+      }
+//    DBSERIAL.println(" slm");
+//    BTSERIAL.print("flow : ");
+//    BTSERIAL.print(flow);
+//    BTSERIAL.println(" slm");
+delay(2);
   }
   return flow;
 }

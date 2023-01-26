@@ -15,9 +15,10 @@ float setPoint = 1;
 //PI VALUES WITH PLUGGED HOLE and setpoint 1
 //float Kp = 700;
 //float Ki = 0.05;
-float Kp = 100;
+// 100, .005, 20000
+float Kp = 800;
 float Ki = 0.005;
-float Kd = 20000;
+float Kd = 1000;
 float currentTime;
 float previousTime;
 float cumError;
@@ -42,10 +43,10 @@ void setupBlower(){
   digitalWrite(PB4, HIGH);
   
   PRINT1("blower 1");
-  spinBlower(255,0);
+  //spinBlower(255,0);
   delay(3000);
   PRINT1("blower 2");
-  spinBlower(0,255);
+  //spinBlower(0,255);
   delay(3000);
   PRINT1("stop");
   spinBlower(0,0);
@@ -83,8 +84,8 @@ void loopBlower(float flow){
   rateError = (error - lastError)/elapsedTime;
   float output = (Kp * error) + (Ki * cumError) + (Kd * rateError);
   
-  if(output < 0){
-    output = 0;
+  if(output < 25){
+    output = 25;
   }
   else if(output > 255){
     output = 255;

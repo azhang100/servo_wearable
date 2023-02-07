@@ -16,7 +16,7 @@
 SFM3X00 flowSensor(FLOW_SENSOR_ADDRESS); // create insance of sensor with address 
 int timer = 0;
 void setupFlow(){
-  PRINT1("setting up flow");
+  //PRINT1("setting up flow");
   Wire.begin();
   flowSensor.begin(); // initialize sensor values and start measuring flow
 
@@ -41,7 +41,7 @@ void setupFlow(){
   BTSERIAL.println(flowSensor.flowScale);
   BTSERIAL.print("read flow offset: ");
   BTSERIAL.println(flowSensor.flowOffset);
-  PRINT1("done");
+//  PRINT1("done");
 }
 
 float loopFlow(){

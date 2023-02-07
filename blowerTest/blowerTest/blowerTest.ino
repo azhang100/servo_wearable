@@ -8,18 +8,18 @@
 float sweepNew = 1; 
   
 void setup() {
-  delay(1000);
+  //delay(1000);
   setupUtil();
   //Wire.begin();
   setupBlower();
-  delay(1000);
-  delay(1000);
+  //delay(1000);
+  //delay(1000);
   setupFlow();
-  delay(1000);
-  delay(1000);
+  //delay(1000);
+  //delay(1000);
   setupSweep();
-  delay(1000);
-  delay(1000);
+  //delay(1000);
+  //delay(1000);
 }
 
 void loop() {

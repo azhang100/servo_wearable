@@ -31,7 +31,7 @@ void spinBlower(int b1, int b2){
 }
 
 void setupBlower(){
-  PRINT1("Setting up blower");
+  //PRINT1("Setting up blower");
   pinMode(PIN_PWM1, OUTPUT);
   pinMode(PIN_PWM2, OUTPUT);
   pinMode(PB15, OUTPUT);
@@ -39,18 +39,18 @@ void setupBlower(){
   pinMode(PA8, INPUT);
   pinMode(PB5, INPUT);
 
-  digitalWrite(PB15, HIGH);
-  digitalWrite(PB4, HIGH);
+  //digitalWrite(PB15, HIGH);
+  //digitalWrite(PB4, HIGH);
   
-  PRINT1("blower 1");
+  //PRINT1("blower 1");
   //spinBlower(255,0);
-  delay(3000);
+  //delay(3000);
   PRINT1("blower 2");
   //spinBlower(0,255);
-  delay(3000);
-  PRINT1("stop");
-  spinBlower(0,0);
-  PRINT1("done");
+  //delay(3000);
+  //PRINT1("stop");
+  //spinBlower(0,0);
+  //PRINT1("done");
   firstTime = millis();
   float currentTime = millis() - firstTime;
   float previousTime = currentTime;
@@ -71,6 +71,8 @@ void setblowerKd(float newKd){
 
 void updateSetPoint(float newSetPoint){
   setPoint = newSetPoint;
+  //DBSERIAL.print("setpoint= ");
+  //DBSERIAL.println(setPoint);
 }
 
 void loopBlower(float flow){

@@ -8,13 +8,10 @@ String info = "";
 int numEnds = 0;
 String egco2 = "";
 float inEGCO2;
-float setPointSweep = 100;
-//float KpSweep = .03;
-//float KiSweep = 0;
-//float KdSweep = 0;
-float KpSweep = 3;
+float setPointSweep = 40;
+float KpSweep = .03;
 float KiSweep = 0;
-float KdSweep = 0;
+float KdSweep = 0.001;
 float currentTimeSweep;
 float previousTimeSweep;
 float cumErrorSweep;
@@ -28,7 +25,6 @@ float firstTimeSweep;
 float errorSweep = 0;
 float testTime;
 bool buildup = true;
-float outputSweep;
 
 void setupSweep(){
   Serial2.begin(9600);
@@ -68,38 +64,10 @@ void getSweep(){
   inEGCO2 = ((inEGCO2-rawLowEGCO2)*(referenceHighEGCO2-referenceLowEGCO2))/(rawHighEGCO2-rawLowEGCO2)+referenceLowEGCO2;
   DBSERIAL.print(inEGCO2);
   DBSERIAL.println("]");
-  DBSERIAL.print("[target=");
-  DBSERIAL.print(setPointSweep);
-  DBSERIAL.println("]");
 
 }
 
 float piSweep(){
-  if(millis() - testTime >= 3000){
-    buildup = !buildup;
-    testTime = millis();
-    if(buildup == false){
-      cumErrorSweep = 0;
-      currentTimeSweep = millis();
-      if(setPointSweep == 100){
-        setPointSweep = 10;
-      }
-      else if(setPointSweep == 10){
-        setPointSweep = 20;
-      }
-      else{
-        setPointSweep = 40;
-      }
-    }
-  }
-  if(buildup == true){
-    outputSweep = inEGCO2 * 0.013;
-    if(outputSweep < 0.1){
-        outputSweep = 0.1;
-      }
-  }
-  else{
-    outputSweep = inEGCO2 * 0.013; 
     previousTimeSweep = currentTimeSweep;
     currentTimeSweep = millis();
     float elapsedTimeSweep = currentTimeSweep - previousTimeSweep;
@@ -107,24 +75,16 @@ float piSweep(){
     float errorSweep = -setPointSweep + (inEGCO2);
     rateErrorSweep = (errorSweep - lastErrorSweep)/elapsedTimeSweep;
     cumErrorSweep += errorSweep * elapsedTimeSweep;
-    DBSERIAL.print("Kp= ");
-    DBSERIAL.println(KpSweep);
-    DBSERIAL.print("errorSweep= ");
-    DBSERIAL.println(errorSweep);
-    outputSweep = (KpSweep * errorSweep) + (KiSweep * cumErrorSweep) + (KdSweep * rateErrorSweep);
-    DBSERIAL.print("outputSweep1= ");
-    DBSERIAL.println(outputSweep);
+    if(elapsedTimeSweep > 10){
+      KiSweep = 0.000006;
+    }
+    float outputSweep = KpSweep * errorSweep + KiSweep * cumErrorSweep + KdSweep * rateErrorSweep;
     if(outputSweep <  inEGCO2 * 0.013){
       outputSweep =  inEGCO2 * 0.013;
       if(outputSweep < 0.1){
         outputSweep = 0.1;
       }
     }
-    DBSERIAL.print("outputSweep2= ");
-  DBSERIAL.println(outputSweep);
-  }
-  DBSERIAL.print("outputSweep3= ");
-  DBSERIAL.println(outputSweep);
   return outputSweep;
 }
 

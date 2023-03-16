@@ -71,7 +71,6 @@ void setblowerKd(float newKd){
 }
 
 void updateSetPoint(float newSetPoint){
-  Serial.println(newSetPoint);
   setPoint = newSetPoint;
   //DBSERIAL.print("setpoint= ");
   //DBSERIAL.println(setPoint);

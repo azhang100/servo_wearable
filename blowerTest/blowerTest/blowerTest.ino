@@ -27,7 +27,7 @@ void loop() {
   checkInput();
   loopBlower(flow);
   float oldSweep = sweepNew;
-  sweepNew = loopSweep();  
+  sweepNew = loopSweep(); 
   if(oldSweep != sweepNew){
     updateSetPoint(sweepNew);
   }

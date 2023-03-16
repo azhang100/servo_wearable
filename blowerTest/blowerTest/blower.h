@@ -11,6 +11,7 @@
 #define PIN_PWM1 PB9
 #define PIN_PWM2 PB8
 
+int i = 0;
 float setPoint = 1;
 //PI VALUES WITH PLUGGED HOLE and setpoint 1
 //float Kp = 700;
@@ -70,6 +71,7 @@ void setblowerKd(float newKd){
 }
 
 void updateSetPoint(float newSetPoint){
+  Serial.println(newSetPoint);
   setPoint = newSetPoint;
   //DBSERIAL.print("setpoint= ");
   //DBSERIAL.println(setPoint);
@@ -92,7 +94,15 @@ void loopBlower(float flow){
   else if(output > 255){
     output = 255;
   }
-  //Serial.println(setPoint);
+  if(i == 50){
+    i = 0;
+    Serial.print("[flow=");
+    Serial.print(flow);
+    Serial.println("]");
+  }
+  else{
+    i = i + 1;
+  }
   //PRINT4("output ", output, "prop. ", Kp*error);
   //PRINT4("int. ", Ki * cumError, "der. ", Kd * rateError);
   spinBlower(output,0);

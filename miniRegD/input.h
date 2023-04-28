@@ -38,7 +38,7 @@ void runCommand(String inputType, String inputVal){
     case "tTemp":
       settTemp(functionInput.toInt());
       break;
-    case ""tPressure":
+    case "tPressure":
       settPressure(functionInput.toInt());
       break;
     case "tTemp":

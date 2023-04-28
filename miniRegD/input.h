@@ -28,7 +28,7 @@ void checkInputRaw(Serial serChannel) { // serChannel is either Serial or Serial
       inputBuf = "";
       runCommand(inputType, inputVal)
     } else              {
-      inputType += c;
+      inputBuf += c;
     }
   }
 }

@@ -25,27 +25,33 @@ class Variable:
         self.labelRead.config(text = str(val))
         
     def send(self):
-        sendVal = self.textWrite.get("1.0",END)
-        if isdigit(sendVal):
-            self.master.terminal.send("["+self.name+":"+sendVal+"]")
+        sendVal = self.textWrite.get("1.0",END).strip()
+        print("sendVal:", sendVal)
+        if sendVal.isdigit():
+            sendString = "["+self.name+"="+sendVal+"]"
+            print("sending:", sendString)
+            self.master.terminal.send(sendString)
         
     def setupGui(self, variableFrame, index):
-        Label(variableFrame, width=20, text=self.name).grid(row=index, column=0)
+        Label(variableFrame, width=15, text=self.name).grid(row=index, column=0)
             
-        self.labelRead = Label(variableFrame, text=self.val, width=10)
+        self.labelRead = Label(variableFrame, text=self.val, width=5)
         self.labelRead.grid(row=index, column=1)
-        Button(variableFrame, text="Graph", command=self.toggleGraph).grid(row=index, column=2)
+        Button(variableFrame, text="A", command=self.toggleGraphA).grid(row=index, column=2)
+        Button(variableFrame, text="B", command=self.toggleGraphB).grid(row=index, column=3)
         
         if self.canWrite:
-            self.textWrite = Text(variableFrame, width=10, height=1)
-            self.textWrite.grid(row=index, column=3)
-            Button(variableFrame, text="Send", command=self.send).grid(row=index, column=4)
+            self.textWrite = Text(variableFrame, width=5, height=1)
+            self.textWrite.grid(row=index, column=4)
+            Button(variableFrame, text="Send", command=self.send).grid(row=index, column=5)
         else:
-            Label(variableFrame, text="read only", height=1).grid(row=index, column=3)
-            Label(variableFrame, text="", height=1).grid(row=index, column=4)
+            Label(variableFrame, text="read only", height=1).grid(row=index, column=4)
+            Label(variableFrame, text="", height=1).grid(row=index, column=5)
     
-    def toggleGraph(self):
-        self.master.graph.toggleVariable(self.name)
+    def toggleGraphA(self):
+        self.master.graphA.toggleVariable(self.name)
+    def toggleGraphB(self):
+        self.master.graphB.toggleVariable(self.name)
     
 #    def __init__(self, name, rw, minDispVal, maxDispVal):
 #        self.__init__(name, rw)
@@ -63,7 +69,7 @@ class VariableManager:
         
         Label(self.variableFrame, text="NAME", font=('Helvetica 12 bold')).grid(row=0, column=0)
         Label(self.variableFrame, text="READ", font=('Helvetica 12 bold')).grid(row=0, column=1)
-        Label(self.variableFrame, text="WRITE", font=('Helvetica 12 bold')).grid(row=0, column=3)
+        Label(self.variableFrame, text="WRITE", font=('Helvetica 12 bold')).grid(row=0, column=4)
         index = 0
         for key in self.variables:
             index += 1
@@ -108,8 +114,7 @@ class VariableManager:
                 if (len(incomingStringSplit) == 2):
                     name = incomingStringSplit[0]
                     val = incomingStringSplit[1]
-                    # if (isDigit(incomingStringSplit[1])):
-                    if (True): # TODO isDigit properly
+                    if incomingStringSplit[1].isdigit():
                         print("name:", name, ", val:", val)
                         self.variables[name].updateRead(int(val))
                 self.incomingString = ""

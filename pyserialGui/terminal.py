@@ -6,7 +6,7 @@ class Terminal:
     
     def __init__(self, master, portName):
 
-        WIDTH = 60
+        WIDTH = 40
     
         self.master = master
         self.root = master.root
@@ -42,7 +42,7 @@ class Terminal:
         Label(self.terminalFrame, text="OUTGOING").pack(side=TOP)
 
         outgoingFrame = Frame(self.terminalFrame)
-        self.outgoing = Text (outgoingFrame, width=WIDTH, height=5, takefocus=0)
+        self.outgoing = Text (outgoingFrame, width=WIDTH, height=10, takefocus=0)
         self.outgoing.bind("<Key>", lambda e: "break")
         self.outgoing.pack(side=LEFT)
         outgoingScroll = Scrollbar(outgoingFrame) #scroll
@@ -77,6 +77,7 @@ class Terminal:
         self.send(outputText)
 
     def send(self, outputText):
+        print("terminal.send("+outputText+")")
         # 1) output on serial
         self.deviceSerial.write(outputText.encode('UTF-8'))
         # 2) display on screen

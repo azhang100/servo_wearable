@@ -5,19 +5,18 @@ from tkinter import *
 
 class Graph:
     GRAPH_WIDTH = 600
-    LEGEND_WIDTH = 50
+    LEGEND_WIDTH = 40
+    XAXIS_HEIGHT = 40
     GRAPH_BUFFER = 50
-    GRAPH_HEIGHT = 250+GRAPH_BUFFER*2
+    GRAPH_HEIGHT = 200+GRAPH_BUFFER*2
     GRAPH_HEIGHT_MIN = GRAPH_HEIGHT-GRAPH_BUFFER
     GRAPH_HEIGHT_MAX = GRAPH_BUFFER
-    
-    UDPATE_PERIOD = 1000
     
     COLORS = ("red", "blue", "green", "orange", "purple", "brown", "pink", "turquoise",
               "red", "blue", "green", "orange", "purple", "brown", "pink", "turquoise",
               "red", "blue", "green", "orange", "purple", "brown", "pink", "turquoise")
 
-    def __init__(self, master):
+    def __init__(self, master, updatePeriod, xStep):
         self.master = master
         self.root = master.root
         self.root.after(100, self.loop)
@@ -28,11 +27,15 @@ class Graph:
                                   height=Graph.GRAPH_HEIGHT, width=Graph.GRAPH_WIDTH)
         self.graphCanvas.grid(row=0,column=1)
         self.graphXAxis = Canvas(self.graphFrame, bg="white", 
-                                  height=Graph.LEGEND_WIDTH, width=Graph.GRAPH_WIDTH)
+                                  height=Graph.XAXIS_HEIGHT, width=Graph.GRAPH_WIDTH)
         self.graphXAxis.grid(row=1,column=1)
         self.legendFrame = Frame(self.graphFrame)
         self.legendFrame.grid(row=0,column=0)
         Button(self.graphFrame, text="Clear\nVariables", command=self.clearVariables).grid(row=1, column=0)
+        
+        # constants
+        self.updatePeriod = updatePeriod
+        self.xStep = xStep
         
         # Variables
         self.graphVariableKeys = []
@@ -51,27 +54,26 @@ class Graph:
         self.toggleVariable("tegco2")
     
     def drawXAxis(self):
-        STEP = 60;
-        self.graphXAxis.create_text(Graph.GRAPH_WIDTH/2, Graph.LEGEND_WIDTH/2, anchor="n", 
-                                    text= "Time (s)", fill="black", font=('Helvetica 12 bold'))
+        self.graphXAxis.create_text(Graph.GRAPH_WIDTH/2, 25, anchor="n", 
+                                    text= "Time (s)", fill="black", font=('Helvetica 10 bold'))
         
         # zero tick
         xPos = 0
-        self.graphXAxis.create_line(xPos+3, 10, xPos+3, 0)
-        self.graphXAxis.create_text(xPos+3, 10, anchor="nw", fill="black",
-                                    text=str(xPos*Graph.UDPATE_PERIOD//1000))
+        self.graphXAxis.create_line(xPos+2, 10, xPos+2, 0)
+        self.graphXAxis.create_text(xPos+2, 10, anchor="nw", fill="black",
+                                    text=str(xPos*self.updatePeriod//1000))
                                     
         # most ticks
-        while xPos<Graph.GRAPH_WIDTH-STEP:
-            xPos += STEP
+        while xPos<Graph.GRAPH_WIDTH-self.xStep:
+            xPos += self.xStep
             self.graphXAxis.create_line(xPos, 10, xPos, 0)
             self.graphXAxis.create_text(xPos, 10, anchor="n", fill="black",
-                                        text=str(xPos*Graph.UDPATE_PERIOD//1000))
+                                        text=str(xPos*self.updatePeriod//1000))
         # last tick
-        xPos += STEP
+        xPos += self.xStep
         self.graphXAxis.create_line(xPos, 10, xPos, 0)
         self.graphXAxis.create_text(xPos, 10, anchor="ne", fill="black",
-                                    text=str(xPos*Graph.UDPATE_PERIOD//1000))
+                                    text=str(xPos*self.updatePeriod//1000))
     
     def toggleVariable(self, key):
         if key not in self.graphVariableKeys:
@@ -85,17 +87,16 @@ class Graph:
             legendCanvas = Canvas(self.legendFrame, bg=Graph.COLORS[index], 
                                   height=Graph.GRAPH_HEIGHT, width=Graph.LEGEND_WIDTH)
             self.drawLegend(legendCanvas, variable)
-            
                                      
             legendCanvas.pack(side=LEFT)
             self.legendCanvases.append(legendCanvas)
     
     def drawLegend(self, legendCanvas, variable):
-        legendCanvas.create_text(Graph.LEGEND_WIDTH/2, Graph.GRAPH_HEIGHT/2, anchor="s", angle=90,
-                                 text=variable.name, fill="white", font=('Helvetica 12 bold'))
+        legendCanvas.create_text(18, Graph.GRAPH_HEIGHT, anchor="sw", angle=90,
+                                 text=variable.name, fill="white", font=('Helvetica 10 bold'))
                                  
         # math
-        STEP=50
+        STEP=20
         pixelVal = (variable.maxDispVal-variable.minDispVal)/(Graph.GRAPH_HEIGHT_MIN-Graph.GRAPH_HEIGHT_MAX)
                  
         # zero tick=
@@ -137,7 +138,7 @@ class Graph:
                 self.dots[self.xAxisIndex].append(dot)
             colorIndex += 1
         
-        self.root.after(Graph.UDPATE_PERIOD, self.loop) # update graph again soon
+        self.root.after(self.updatePeriod, self.loop) # update graph again soon
         
 def mapRange(x, in_min, in_max, out_min, out_max):
     # could fix the snakecase but too lazy right now

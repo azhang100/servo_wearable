@@ -19,7 +19,9 @@ class Master:
         
         self.variableManager = VariableManager(self)
 
-        self.graph = Graph(self) # must come after variableManager
+        # must come after variableManager
+        self.graphA = Graph(self, updatePeriod=100, xStep=50)
+        self.graphB = Graph(self, updatePeriod=6000, xStep=50)
     
     def onClosing(self):
         self.root.destroy()

@@ -31,12 +31,12 @@ class Terminal:
 
         incomingFrame = Frame(self.terminalFrame)
         self.incoming = Text (incomingFrame, width=WIDTH, height=25, takefocus=0)
+        self.incoming.bind("<Key>", lambda e: "break")
         self.incoming.pack(side=LEFT)
         incomingScroll= Scrollbar(incomingFrame) #scroll
         incomingScroll.pack(side=RIGHT, fill = Y)
         self.incoming.config(yscrollcommand=incomingScroll.set)
         incomingScroll.config(command=self.incoming.yview)
-        self.incoming.bind("<Key>", lambda e: "break")
         incomingFrame.pack(side=TOP)
 
         Label(self.terminalFrame, text="OUTGOING").pack(side=TOP)
@@ -54,7 +54,7 @@ class Terminal:
         Label(self.terminalFrame, text="QUEUE").pack(side=TOP)
 
         queueFrame = Frame(self.terminalFrame)
-        self.queue = Text (queueFrame, width=WIDTH, height=1, takefocus=0)
+        self.queue = Entry(queueFrame, width=WIDTH, takefocus=0)
         self.queue.pack(side=LEFT)
         queueFrame.pack(side=TOP)
 
@@ -67,7 +67,7 @@ class Terminal:
 
     def _sendButton(self):
         # 1) get the outputText
-        outputText = queue.get("1.0",END)
+        outputText = self.queue.get("1.0",END)
         self.queue.delete("1.0",END)
         print("outputText:", outputText)
         print("outputText:", outputText.encode('UTF-8'))

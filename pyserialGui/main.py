@@ -6,16 +6,17 @@ from variables import *
 from graph import *
 
 class Master:
-    def __init__(self):
+    def __init__(self, comPort):
     
         #============ make a TkInter Window ==============
         self.root = Tk()
+        # self.root.geometry("750x250")
         self.root.wm_title("Servoregulator Interface")
         self.root.protocol("WM_DELETE_WINDOW", self.onClosing)
     
         #============ make features ==============
         
-        self.terminal = Terminal(self, "COM1")
+        self.terminal = Terminal(self, comPort)
         
         self.variableManager = VariableManager(self)
 
@@ -26,8 +27,33 @@ class Master:
     def onClosing(self):
         self.root.destroy()
         self.terminal.close()
+
+class GetComPort():
+    def __init__(self):
+        self.win= Tk() # Create an instance of Tkinter frame
+        self.win.geometry("300x100")
+        #Initialize a Label to display the User Input
+        label=Label(self.win, text="Enter Com Port")
+        label.pack()
+        #Create an Entry widget to accept User Input
+        self.entry= Entry(self.win, width=40)
+        self.entry.focus_set()
+        self.entry.pack()
+        #Create a Button to validate Entry Widget
+        Button(self.win, text= "Okay",width= 20, command=self.accept).pack(pady=20)
+        self.win.mainloop()
+        
+    def accept(self):
+        self.result = self.entry.get()
+        print("using:", self.result)
+        self.win.destroy()
+        
+    def get(self):
+        return self.result
         
 #============== run TKInter ==========
 
-master = Master()
+comPort = GetComPort().get()
+        
+master = Master(comPort)
 master.root.mainloop()

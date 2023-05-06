@@ -4,6 +4,7 @@ from tkinter import *
 from terminal import *
 from variables import *
 from graph import *
+from logger import *
 
 class Master:
     def __init__(self, comPort):
@@ -17,6 +18,7 @@ class Master:
         #============ make features ==============
         
         self.terminal = Terminal(self, comPort)
+        self.logger = Logger()
         
         self.variableManager = VariableManager(self)
 
@@ -27,6 +29,7 @@ class Master:
     def onClosing(self):
         self.root.destroy()
         self.terminal.close()
+        self.logger.close()
 
 class GetComPort():
     def __init__(self):

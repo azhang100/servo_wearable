@@ -102,6 +102,7 @@ class Terminal:
             
             # update variables
             self.master.variableManager.incoming(c)
+            self.master.logger.incoming(c)
         
     def loop(self):
         self._readSerial()

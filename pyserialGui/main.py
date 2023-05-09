@@ -44,9 +44,10 @@ class GetComPort():
         self.entry.pack()
         #Create a Button to validate Entry Widget
         Button(self.win, text= "Okay",width= 20, command=self.accept).pack(pady=20)
+        self.win.bind('<Return>', self.accept)
         self.win.mainloop()
         
-    def accept(self):
+    def accept(self, event=None):
         self.result = self.entry.get()
         print("using:", self.result)
         self.win.destroy()

@@ -100,9 +100,9 @@ class VariableManager:
                 if (len(incomingStringSplit) == 2):
                     name = incomingStringSplit[0]
                     val = incomingStringSplit[1]
-                    if incomingStringSplit[1].isdigit():
+                    if incomingStringSplit[1].replace(".", "").isnumeric():
                         print("name:", name, ", val:", val)
-                        self.variables[name].updateRead(int(val))
+                        self.variables[name].updateRead(float(val))
                 self.incomingString = ""
             else:
                 self.incomingString = self.incomingString + char

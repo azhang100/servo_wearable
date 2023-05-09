@@ -127,7 +127,7 @@ class Graph:
         for key in self.graphVariableKeys:
             variable = self.master.variableManager.variables[key]
             
-            if (isinstance(variable.val, int)): # else variable.val = "N/A"
+            if (isinstance(variable.val, int) or isinstance(variable.val, float)): # else variable.val = "N/A"
                 yPos = mapRange(variable.val, variable.minDispVal, variable.maxDispVal, 
                                 Graph.GRAPH_HEIGHT_MIN, Graph.GRAPH_HEIGHT_MAX)
                 

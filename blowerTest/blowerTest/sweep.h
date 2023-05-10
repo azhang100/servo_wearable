@@ -10,7 +10,11 @@ String egco2 = "";
 float inEGCO2;
 float setPointSweep = 20;
 //CURRENT
+<<<<<<< Updated upstream
 float KpSweep = .02;
+=======
+float KpSweep = .025;
+>>>>>>> Stashed changes
 float KiSweep = 0.000002;
 float KdSweep = 0;
 //OLD
@@ -34,7 +38,10 @@ bool buildup = true;
 bool ten = true;
 bool twenty = true;
 bool forty = true;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 void setupSweep(){
   Serial2.begin(9600);
@@ -83,7 +90,38 @@ void getSweep(){
   DBSERIAL.println("]");
 
 }
-
+//void changeSet(){
+//  if(millis() - firstTimeSweep > 120000 && ten == true){
+//      setPointSweep = 10;
+//      cumErrorSweep = 0;
+//      ten = false;
+//      Serial.println();
+//      Serial.println();
+//      Serial.println();
+//    }
+//    if(millis() - firstTimeSweep > 240000 && millis() - firstTimeSweep < 360000){
+//      setPointSweep = 1000;
+//    }
+//    if(millis() - firstTimeSweep > 360000 && twenty == true){
+//      cumErrorSweep = 0;
+//      twenty = false;
+//      setPointSweep = 20;
+//      Serial.println();
+//      Serial.println();
+//      Serial.println();
+//    }
+//    if(millis() - firstTimeSweep > 480000&& millis() - firstTimeSweep < 600000){
+//      setPointSweep = 1000;
+//    }
+//    if(millis() - firstTimeSweep > 600000 && forty == true){
+//      setPointSweep = 40;
+//      cumErrorSweep = 0;
+//      forty = false;
+//      Serial.println();
+//      Serial.println();
+//      Serial.println();
+//    }
+//}
 float piSweep(){
     //changeSet();
     previousTimeSweep = currentTimeSweep;
@@ -105,7 +143,11 @@ float piSweep(){
     if(cumErrorSweep < -1 & errorSweep < 0){
       cumErrorSweep = 0;
     }
+<<<<<<< Updated upstream
     outputSweep = 2;
+=======
+    //outputSweep = 1;
+>>>>>>> Stashed changes
   return outputSweep;
 }
 

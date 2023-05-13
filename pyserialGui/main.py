@@ -1,5 +1,6 @@
 
 from tkinter import *
+from tkinter import ttk
 
 from terminal import *
 from variables import *
@@ -12,32 +13,36 @@ class Master:
         #============ make a TkInter Window ==============
         
         self.root = Tk()
-        self.root.geometry("800x480")
+        self.root.geometry("1280x800")
         self.root.wm_title("Servoregulator Interface")
         self.root.protocol("WM_DELETE_WINDOW", self.onClosing)
         
-        self.note = Notebook(self.root)
+        self.note = ttk.Notebook(self.root)
     
         #============ make features ==============
         
-        frame = Frame(self.note)
-        self.terminal = Terminal(self, terminalFrame, comPort)
-        note.add(frame, text="terminal")
+        frame = ttk.Frame(self.note)
+        frame.pack(fill="both", expand=True)
+        self.terminal = Terminal(self, frame, comPort)
+        self.note.add(frame, text="terminal")
         
         self.logger = Logger()
         
-        frame = Frame(self.note)
+        frame = ttk.Frame(self.note)
+        frame.pack(fill="both", expand=True)
         self.variableManager = VariableManager(self, self.note)
-        note.add(frame, text="variables")
+        self.note.add(frame, text="variables")
 
         # must come after variableManager
-        frame = Frame(self.note)
+        frame = ttk.Frame(self.note)
+        frame.pack(fill="both", expand=True)
         self.graphA = Graph(self, self.note, updatePeriod=100, xStep=50)
-        note.add(frame, text="short graph")
+        self.note.add(frame, text="short graph")
         
-        frame = Frame(self.note)
+        frame = ttk.Frame(self.note)
+        frame.pack(fill="both", expand=True)
         self.graphB = Graph(self, self.note, updatePeriod=6000, xStep=50)
-        note.add(frame, text="long graph")
+        self.note.add(frame, text="long graph")
     
     def onClosing(self):
         self.root.destroy()
@@ -63,7 +68,7 @@ class GetComPort():
     def accept(self, event=None):
         self.result = self.entry.get()
         print("using:", self.result)
-        self.win.destroy()
+        self.root.destroy()
         
     def get(self):
         return self.result

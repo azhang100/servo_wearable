@@ -16,12 +16,12 @@ class Graph:
               "red", "blue", "green", "orange", "purple", "brown", "pink", "turquoise",
               "red", "blue", "green", "orange", "purple", "brown", "pink", "turquoise")
 
-    def __init__(self, master, updatePeriod, xStep):
+    def __init__(self, master, frame, updatePeriod, xStep):
         self.master = master
         self.root = master.root
         self.root.after(100, self.loop)
         
-        self.graphFrame = Frame(self.root)
+        self.graphFrame = frame
         
         self.graphCanvas = Canvas(self.graphFrame, bg="white", 
                                   height=Graph.GRAPH_HEIGHT, width=Graph.GRAPH_WIDTH)

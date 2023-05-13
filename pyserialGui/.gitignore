@@ -1,6 +1,7 @@
 # Custom
 *.txt
 *.pyc
+*.CSV
 
 # Prerequisites
 *.d

@@ -4,7 +4,7 @@ from tkinter import *
 
 class Terminal:
     
-    def __init__(self, master, portName):
+    def __init__(self, master, frame, portName):
 
         WIDTH = 40
     
@@ -15,7 +15,7 @@ class Terminal:
         #============ Serial ==============
     
         self.deviceSerial = Serial(portName, 9600, timeout=0, writeTimeout=0) #ensure non-blocking
-        self.terminalFrame = Frame(self.root)
+        self.terminalFrame = frame
                 
         #============ Log ==============
         

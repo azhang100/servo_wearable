@@ -5,8 +5,6 @@ from tkinter import *
 class Terminal:
     
     def __init__(self, master, frame, portName):
-
-        WIDTH = 40
     
         self.master = master
         self.root = master.root
@@ -30,7 +28,7 @@ class Terminal:
         Label(self.terminalFrame, text="INCOMING").pack(side=TOP)
 
         incomingFrame = Frame(self.terminalFrame)
-        self.incoming = Text (incomingFrame, width=WIDTH, height=25, takefocus=0)
+        self.incoming = Text (incomingFrame, height=25, takefocus=0)
         self.incoming.bind("<Key>", lambda e: "break")
         self.incoming.pack(side=LEFT)
         incomingScroll= Scrollbar(incomingFrame) #scroll
@@ -42,7 +40,7 @@ class Terminal:
         Label(self.terminalFrame, text="OUTGOING").pack(side=TOP)
 
         outgoingFrame = Frame(self.terminalFrame)
-        self.outgoing = Text (outgoingFrame, width=WIDTH, height=10, takefocus=0)
+        self.outgoing = Text (outgoingFrame, height=10, takefocus=0)
         self.outgoing.bind("<Key>", lambda e: "break")
         self.outgoing.pack(side=LEFT)
         outgoingScroll = Scrollbar(outgoingFrame) #scroll
@@ -54,7 +52,7 @@ class Terminal:
         Label(self.terminalFrame, text="QUEUE").pack(side=TOP)
 
         queueFrame = Frame(self.terminalFrame)
-        self.queue = Entry(queueFrame, width=WIDTH, takefocus=0)
+        self.queue = Entry(queueFrame, takefocus=0)
         self.queue.pack(side=LEFT)
         queueFrame.pack(side=TOP)
 

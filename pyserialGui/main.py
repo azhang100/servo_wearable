@@ -19,31 +19,29 @@ class Master:
         
         #============ make features ==============
         
+        self.logger = Logger()
+
+        frame = Frame(self.root)
+        self.variableManager = VariableManager(self, frame)
+        frame.pack(fill=Y, expand=False, side=RIGHT)
+        
         self.note = ttk.Notebook(self.root)
-        self.note.pack(pady=10, expand=True)
+        self.note.pack(fill=BOTH, expand=True, side=RIGHT)
         
         frame = Frame(self.note)
         self.terminal = Terminal(self, frame, comPort)
         frame.pack(fill="both", expand=True)
-        self.note.add(frame, text="terminal")
+        self.note.add(frame, text="Terminal")
         
-        self.logger = Logger()
-        
-        frame = Frame(self.note)
-        self.variableManager = VariableManager(self, frame)
-        frame.pack(fill="both", expand=True)
-        self.note.add(frame, text="variables")
-
         # must come after variableManager
-        frame = Frame(self.note)
+        graphFrame = Frame(self.note)
+        frame = Frame(graphFrame)
         self.graphA = Graph(self, frame, updatePeriod=100, xStep=50)
-        frame.pack(fill="both", expand=True)
-        self.note.add(frame, text="graph short")
-        
-        frame = Frame(self.note)
+        frame.grid(column=0, row=0, sticky=E)
+        frame = Frame(graphFrame)
         self.graphB = Graph(self, frame, updatePeriod=6000, xStep=50)
-        frame.pack(fill="both", expand=True)
-        self.note.add(frame, text="graph long")
+        frame.grid(column=0, row=1, sticky=E)
+        self.note.add(graphFrame, text="Graph")
     
     def onClosing(self):
         self.root.destroy()

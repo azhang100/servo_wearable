@@ -20,7 +20,7 @@ class Master:
         #============ make features ==============
         
         self.note = ttk.Notebook(self.root)
-        self.note.grid(pady=10, expand=True)
+        self.note.pack(pady=10, expand=True)
         
         frame = Frame(self.note)
         self.terminal = Terminal(self, frame, comPort)

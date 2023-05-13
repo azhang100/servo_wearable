@@ -74,8 +74,6 @@ class VariableManager:
         for key in self.variables:
             index += 1
             self.variables[key].setupGui(self.variableFrame, index)
-        
-        self.variableFrame.pack(side=RIGHT)
         self.incomingString = ""
 
     def addVariable(self, name, rw, minDispVal=0, maxDispVal=100):

@@ -60,8 +60,6 @@ class Terminal:
 
         sendButton = Button(self.terminalFrame, text="Send", command=self._sendButton)
         sendButton.pack(side=TOP)
-        
-        self.terminalFrame.pack(side=RIGHT)
 
     #============ functions ==============
 

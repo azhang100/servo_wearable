@@ -48,7 +48,6 @@ class Graph:
         self.xAxisIndex = 0
         self.drawXAxis()
         
-        self.graphFrame.pack(side=TOP)
         self.toggleVariable("egco2")
         self.toggleVariable("sweep")
         self.toggleVariable("tegco2")

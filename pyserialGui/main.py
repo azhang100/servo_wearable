@@ -17,32 +17,33 @@ class Master:
         self.root.wm_title("Servoregulator Interface")
         self.root.protocol("WM_DELETE_WINDOW", self.onClosing)
         
-        self.note = ttk.Notebook(self.root)
-    
         #============ make features ==============
         
-        frame = ttk.Frame(self.note)
-        frame.pack(fill="both", expand=True)
+        self.note = ttk.Notebook(self.root)
+        self.note.grid(pady=10, expand=True)
+        
+        frame = Frame(self.note)
         self.terminal = Terminal(self, frame, comPort)
+        frame.pack(fill="both", expand=True)
         self.note.add(frame, text="terminal")
         
         self.logger = Logger()
         
-        frame = ttk.Frame(self.note)
+        frame = Frame(self.note)
+        self.variableManager = VariableManager(self, frame)
         frame.pack(fill="both", expand=True)
-        self.variableManager = VariableManager(self, self.note)
         self.note.add(frame, text="variables")
 
         # must come after variableManager
-        frame = ttk.Frame(self.note)
+        frame = Frame(self.note)
+        self.graphA = Graph(self, frame, updatePeriod=100, xStep=50)
         frame.pack(fill="both", expand=True)
-        self.graphA = Graph(self, self.note, updatePeriod=100, xStep=50)
-        self.note.add(frame, text="short graph")
+        self.note.add(frame, text="graph short")
         
-        frame = ttk.Frame(self.note)
+        frame = Frame(self.note)
+        self.graphB = Graph(self, frame, updatePeriod=6000, xStep=50)
         frame.pack(fill="both", expand=True)
-        self.graphB = Graph(self, self.note, updatePeriod=6000, xStep=50)
-        self.note.add(frame, text="long graph")
+        self.note.add(frame, text="graph long")
     
     def onClosing(self):
         self.root.destroy()

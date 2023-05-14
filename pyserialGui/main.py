@@ -21,12 +21,12 @@ class Master:
         
         self.logger = Logger()
 
-        frame = Frame(self.root)
-        self.variableManager = VariableManager(self, frame)
-        frame.pack(fill=Y, expand=False, side=RIGHT)
+        variableFrame = Frame(self.root)
+        self.variableManager = VariableManager(self, variableFrame)
+        variableFrame.pack(fill=Y, expand=False, side=RIGHT, pady=20, padx=50)
         
         self.note = ttk.Notebook(self.root)
-        self.note.pack(fill=BOTH, expand=True, side=RIGHT)
+        self.note.pack(fill=BOTH, expand=True, side=RIGHT, pady=10)
         
         frame = Frame(self.note)
         self.terminal = Terminal(self, frame, comPort)

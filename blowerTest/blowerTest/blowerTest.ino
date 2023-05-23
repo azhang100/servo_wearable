@@ -23,13 +23,14 @@ void setup() {
 }
 
 void loop() {
+  sensorHealth();
   float flow = loopFlow();
   checkInput();
   loopBlower(flow);
   float oldSweep = sweepNew;
-  sweepNew = loopSweep();  
-  if(oldSweep != sweepNew){
-    updateSetPoint(sweepNew);
-  }
+  //sweepNew = loopSweep();  
+//  if(oldSweep != sweepNew){
+//    updateSetPoint(sweepNew);
+//  }
 
 }

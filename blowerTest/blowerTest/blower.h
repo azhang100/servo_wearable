@@ -10,6 +10,7 @@
 //#define PIN_PWM2 10
 #define PIN_PWM1 PB9
 #define PIN_PWM2 PB8
+#define buzzer PC13
 
 int i = 0;
 float setPoint = 1;
@@ -26,6 +27,19 @@ float cumError;
 float rateError;
 float firstTime;
 float error = 0;
+int health = 10000000;
+float healthTime;
+float manualSweep = 0;
+
+
+void settSweep(float newSweep){
+  setPoint = newSweep;
+}
+
+void setmanualSweep(float newSweep){
+  manualSweep = newSweep;
+}
+
 void spinBlower(int b1, int b2){
   analogWrite(PIN_PWM1, b1);
   analogWrite(PIN_PWM2, b2);
@@ -56,6 +70,20 @@ void setupBlower(){
   float currentTime = millis() - firstTime;
   float previousTime = currentTime;
   float cumError = 0;
+}
+
+void setSensorHealth(int newHealth){
+  health = newHealth;
+  healthTime = millis();
+}
+//sensor health: healthy | reserved | humidity | no response | X | X | X | X |
+void sensorHealth(){
+  if(millis() - healthTime > 10000){
+    health = 00010000;
+  }
+  if(health != 10000000){
+    digitalWrite(buzzer, HIGH);
+  }
 }
 
 void setblowerKp(float newKp){

@@ -8,13 +8,9 @@ String info = "";
 int numEnds = 0;
 String egco2 = "";
 float inEGCO2;
-float setPointSweep = 20;
+float setPointSweep = 10;
 //CURRENT
-<<<<<<< Updated upstream
 float KpSweep = .02;
-=======
-float KpSweep = .025;
->>>>>>> Stashed changes
 float KiSweep = 0.000002;
 float KdSweep = 0;
 //OLD
@@ -34,14 +30,11 @@ float firstTimeSweep;
 float errorSweep = 0;
 float testTime;
 float outputSweep;
-bool buildup = true;
-bool ten = true;
-bool twenty = true;
-bool forty = true;
-<<<<<<< Updated upstream
+//bool buildup = true;
+//bool ten = true;
+//bool twenty = true;
+//bool forty = true;
 
-=======
->>>>>>> Stashed changes
 
 void setupSweep(){
   Serial2.begin(9600);
@@ -88,7 +81,6 @@ void getSweep(){
   }
   DBSERIAL.print(inEGCO2);
   DBSERIAL.println("]");
-
 }
 //void changeSet(){
 //  if(millis() - firstTimeSweep > 120000 && ten == true){
@@ -143,11 +135,7 @@ float piSweep(){
     if(cumErrorSweep < -1 & errorSweep < 0){
       cumErrorSweep = 0;
     }
-<<<<<<< Updated upstream
-    outputSweep = 2;
-=======
     //outputSweep = 1;
->>>>>>> Stashed changes
   return outputSweep;
 }
 

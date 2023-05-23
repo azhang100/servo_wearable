@@ -68,11 +68,11 @@ class Terminal:
 
     def _sendButton(self):
         # 1) get the outputText
-        outputText = self.queue.get("1.0",END)
-        self.queue.delete("1.0",END)
+        outputText = self.queue.get()
+        self.queue.delete(0,END)
         print("outputText:", outputText)
         print("outputText:", outputText.encode('UTF-8'))
-        outputText = outputText + "\n"
+        outputText = outputText
         
         # 2) send
         self.send(outputText)

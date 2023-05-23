@@ -48,6 +48,23 @@ class Master:
         self.terminal.close()
         self.logger.close()
 
+def readFile(fileName):
+    try:
+        f = open("demofile.txt", "r")
+        res = f.read()
+        f.close()
+        return res
+    except:
+        f = open("demofile.txt", "w")
+        f.write("")
+        f.close()
+        return ""
+    
+def saveFile(fileName, text):
+    f = open("demofile.txt", "w")
+    f.write(text)
+    f.close()
+
 class GetComPort():
     def __init__(self):
         self.root= Tk() # Create an instance of Tkinter frame
@@ -57,6 +74,7 @@ class GetComPort():
         label.pack()
         #Create an Entry widget to accept User Input
         self.entry= Entry(self.root, width=40)
+        self.entry.insert(0,readFile("comPort.txt"))
         self.entry.focus_set()
         self.entry.pack()
         #Create a Button to validate Entry Widget
@@ -68,6 +86,7 @@ class GetComPort():
         self.result = self.entry.get()
         print("using:", self.result)
         self.root.destroy()
+        saveFile("comPort.txt", self.result)
         
     def get(self):
         return self.result

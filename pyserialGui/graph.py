@@ -57,26 +57,33 @@ class Graph:
         self.toggleVariable("tegco2")
     
     def drawXAxis(self):
+        if (self.updatePeriod < 1000):
+            xLegend = "Time (s)"
+            updatePeriodDiv = 1
+        else:
+            xLegend = "Time (m)"
+            updatePeriodDiv = 60
+        
         self.graphXAxis.create_text(Graph.GRAPH_WIDTH/2, 25, anchor="n", 
-                                    text= "Time (s)", fill="black", font=('Helvetica 10 bold'))
+                                    text= xLegend, fill="black", font=('Helvetica 10 bold'))
         
         # zero tick
         xPos = 0
         self.graphXAxis.create_line(xPos+2, 10, xPos+2, 0)
         self.graphXAxis.create_text(xPos+2, 10, anchor="nw", fill="black",
-                                    text=str(xPos*self.updatePeriod//1000))
+                                    text=str(xPos*self.updatePeriod//updatePeriodDiv//1000))
                                     
         # most ticks
         while xPos<Graph.GRAPH_WIDTH-self.xStep:
             xPos += self.xStep
             self.graphXAxis.create_line(xPos, 10, xPos, 0)
             self.graphXAxis.create_text(xPos, 10, anchor="n", fill="black",
-                                        text=str(xPos*self.updatePeriod//1000))
+                                        text=str(xPos*self.updatePeriod//updatePeriodDiv//1000))
         # last tick
         xPos += self.xStep
         self.graphXAxis.create_line(xPos, 10, xPos, 0)
         self.graphXAxis.create_text(xPos, 10, anchor="ne", fill="black",
-                                    text=str(xPos*self.updatePeriod//1000))
+                                    text=str(xPos*self.updatePeriod//updatePeriodDiv//1000))
     
     def toggleVariable(self, key):
         print("toggleVariable('"+str(key)+"')")

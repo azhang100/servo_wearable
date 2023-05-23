@@ -14,6 +14,10 @@ class Master:
         
         self.root = Tk()
         self.root.geometry("1280x800")
+        #try:
+        #    self.root.attributes("-zoomed", True) # only works on ubuntu
+        #except:
+        #    pass
         self.root.wm_title("Servoregulator Interface")
         self.root.protocol("WM_DELETE_WINDOW", self.onClosing)
         

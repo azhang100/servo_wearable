@@ -20,8 +20,8 @@ self.addVariable("pressureChamber","R")
 self.addVariable("humidity","R")
 self.addVariable("temp","R")
 self.addVariable("tTemp","RW")
-self.addVariable("heaterPWM","R")
-self.addVariable("pumpPWM","R")
+# self.addVariable("heaterPWM","R") # declutter interface
+# self.addVariable("pumpPWM","R") # declutter interface
 
 # both systems
 self.addVariable("tegco2","RW")
@@ -46,4 +46,4 @@ self.addVariable("tSweepCO2", "R", 0, 10000)
 self.addVariable("tSweepN2", "R", 0, 10000)
 
 # misc
-self.addVariable("systemVersion", "R")
+# self.addVariable("systemVersion", "R")

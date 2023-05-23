@@ -33,7 +33,7 @@ class Terminal:
         Label(self.terminalFrameLeft, text="INCOMING").pack(side=TOP)
 
         incomingFrame = Frame(self.terminalFrameLeft)
-        self.incoming = Text (incomingFrame, height=44, width=40, takefocus=0)
+        self.incoming = Text (incomingFrame, height=40, width=40, takefocus=0)
         self.incoming.bind("<Key>", lambda e: "break")
         self.incoming.pack(side=LEFT, expand=True, fill='both')
         incomingScroll= Scrollbar(incomingFrame) #scroll
@@ -45,7 +45,7 @@ class Terminal:
         Label(self.terminalFrameRight, text="OUTGOING").pack(side=TOP)
 
         outgoingFrame = Frame(self.terminalFrameRight)
-        self.outgoing = Text (outgoingFrame, height=40, width=40, takefocus=0)
+        self.outgoing = Text (outgoingFrame, height=35, width=40, takefocus=0)
         self.outgoing.bind("<Key>", lambda e: "break")
         self.outgoing.pack(side=LEFT, expand=True, fill='both')
         outgoingScroll = Scrollbar(outgoingFrame) #scroll

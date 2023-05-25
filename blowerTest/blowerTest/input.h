@@ -28,7 +28,6 @@ void checkInput() {
   }
   while (Serial2.available()) {
     char c = Serial2.read();
-    Serial.write(c);
     if (c == '[') { // start delim
       inputBuf = "";
     } else if (c == '=') { 
@@ -36,6 +35,11 @@ void checkInput() {
       inputBuf = "";
     } else if (c == ']') { 
       inputVal = inputBuf;
+      Serial.print("[");
+      Serial.print(inputType);
+      Serial.print("=");
+      Serial.print(inputVal);
+      Serial.print("]");
       inputBuf = "";
       runCommand(inputType, inputVal, 2);
     } else              {

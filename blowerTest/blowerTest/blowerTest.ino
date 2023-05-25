@@ -26,6 +26,7 @@ void loop() {
   sensorHealth();
   float flow = loopFlow();
   checkInput();
+  //delay(10);
   loopBlower(flow);
   float oldSweep = sweepNew;
   //sweepNew = loopSweep();  

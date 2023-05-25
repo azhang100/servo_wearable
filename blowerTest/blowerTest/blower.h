@@ -123,6 +123,9 @@ void loopBlower(float flow){
   }
   if(i == 50){
     i = 0;
+//    String flowText = "[flow=]";
+//    flowText = flowText + flow;
+//    flowText
     Serial.print("[flow=");
     Serial.print(flow);
     Serial.println("]");

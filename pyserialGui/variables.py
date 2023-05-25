@@ -60,12 +60,12 @@ class Variable:
 #        self.graph = FALSE
 
 class VariableManager:
-    def __init__(self, master):
+    def __init__(self, master, frame):
         self.master = master
         self.root = master.root
         self.setupVariables()
         
-        self.variableFrame = Frame(self.root)
+        self.variableFrame = frame
         
         Label(self.variableFrame, text="NAME", font=('Helvetica 12 bold')).grid(row=0, column=0)
         Label(self.variableFrame, text="READ", font=('Helvetica 12 bold')).grid(row=0, column=1)
@@ -74,8 +74,6 @@ class VariableManager:
         for key in self.variables:
             index += 1
             self.variables[key].setupGui(self.variableFrame, index)
-        
-        self.variableFrame.pack(side=RIGHT)
         self.incomingString = ""
 
     def addVariable(self, name, rw, minDispVal=0, maxDispVal=100):

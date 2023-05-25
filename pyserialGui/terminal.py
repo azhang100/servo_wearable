@@ -4,9 +4,7 @@ from tkinter import *
 
 class Terminal:
     
-    def __init__(self, master, portName):
-
-        WIDTH = 40
+    def __init__(self, master, frame, portName):
     
         self.master = master
         self.root = master.root
@@ -15,7 +13,12 @@ class Terminal:
         #============ Serial ==============
     
         self.deviceSerial = Serial(portName, 9600, timeout=0, writeTimeout=0) #ensure non-blocking
-        self.terminalFrame = Frame(self.root)
+        self.terminalFrameLeft = Frame(frame)
+        self.terminalFrameLeft.grid(column=0, row=0)
+        self.terminalFrameRight = Frame(frame)
+        self.terminalFrameRight.grid(column=1, row=0)
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_columnconfigure(1, weight=1)
                 
         #============ Log ==============
         
@@ -27,51 +30,49 @@ class Terminal:
         
         #============ TkInter ==============
 
-        Label(self.terminalFrame, text="INCOMING").pack(side=TOP)
+        Label(self.terminalFrameLeft, text="INCOMING").pack(side=TOP)
 
-        incomingFrame = Frame(self.terminalFrame)
-        self.incoming = Text (incomingFrame, width=WIDTH, height=25, takefocus=0)
+        incomingFrame = Frame(self.terminalFrameLeft)
+        self.incoming = Text (incomingFrame, height=40, width=40, takefocus=0)
         self.incoming.bind("<Key>", lambda e: "break")
-        self.incoming.pack(side=LEFT)
+        self.incoming.pack(side=LEFT, expand=True, fill='both')
         incomingScroll= Scrollbar(incomingFrame) #scroll
         incomingScroll.pack(side=RIGHT, fill = Y)
         self.incoming.config(yscrollcommand=incomingScroll.set)
         incomingScroll.config(command=self.incoming.yview)
-        incomingFrame.pack(side=TOP)
+        incomingFrame.pack(side=TOP, expand=True, fill='both')
 
-        Label(self.terminalFrame, text="OUTGOING").pack(side=TOP)
+        Label(self.terminalFrameRight, text="OUTGOING").pack(side=TOP)
 
-        outgoingFrame = Frame(self.terminalFrame)
-        self.outgoing = Text (outgoingFrame, width=WIDTH, height=10, takefocus=0)
+        outgoingFrame = Frame(self.terminalFrameRight)
+        self.outgoing = Text (outgoingFrame, height=35, width=40, takefocus=0)
         self.outgoing.bind("<Key>", lambda e: "break")
-        self.outgoing.pack(side=LEFT)
+        self.outgoing.pack(side=LEFT, expand=True, fill='both')
         outgoingScroll = Scrollbar(outgoingFrame) #scroll
         outgoingScroll.pack(side=RIGHT, fill = Y)
         self.outgoing.config(yscrollcommand=outgoingScroll.set)
         outgoingScroll.config(command=self.outgoing.yview)
-        outgoingFrame.pack(side=TOP)
+        outgoingFrame.pack(side=TOP, expand=True, fill='both')
 
-        Label(self.terminalFrame, text="QUEUE").pack(side=TOP)
+        Label(self.terminalFrameRight, text="SEND").pack(side=TOP)
 
-        queueFrame = Frame(self.terminalFrame)
-        self.queue = Entry(queueFrame, width=WIDTH, takefocus=0)
+        queueFrame = Frame(self.terminalFrameRight)
+        self.queue = Entry(queueFrame, takefocus=0, width=45)
         self.queue.pack(side=LEFT)
         queueFrame.pack(side=TOP)
 
-        sendButton = Button(self.terminalFrame, text="Send", command=self._sendButton)
+        sendButton = Button(self.terminalFrameRight, text="Send", command=self._sendButton)
         sendButton.pack(side=TOP)
-        
-        self.terminalFrame.pack(side=RIGHT)
 
     #============ functions ==============
 
     def _sendButton(self):
         # 1) get the outputText
-        outputText = self.queue.get("1.0",END)
-        self.queue.delete("1.0",END)
+        outputText = self.queue.get()
+        self.queue.delete(0,END)
         print("outputText:", outputText)
         print("outputText:", outputText.encode('UTF-8'))
-        outputText = outputText + "\n"
+        outputText = outputText
         
         # 2) send
         self.send(outputText)

@@ -29,7 +29,8 @@ float firstTime;
 float error = 0;
 int health = 10000000;
 float healthTime;
-float manualSweep = 0;
+float manualSweep = 1;
+bool manualFlow = false;
 
 
 void settSweep(float newSweep){
@@ -38,6 +39,12 @@ void settSweep(float newSweep){
 
 void setmanualSweep(float newSweep){
   manualSweep = newSweep;
+  if(manualSweep == 0){
+    manualFlow = false;
+  }
+  else{
+    manualFlow = true;
+  }
 }
 
 void spinBlower(int b1, int b2){
@@ -59,7 +66,7 @@ void setupBlower(){
   
   //PRINT1("blower 1");
   //spinBlower(255,0);
-  //delay(3000);
+  //delay(30000);
   PRINT1("blower 2");
   //spinBlower(0,255);
   //delay(3000);
@@ -83,6 +90,8 @@ void sensorHealth(){
   }
   if(health != 10000000){
     digitalWrite(buzzer, HIGH);
+    manualSweep = 1;
+    manualFlow = true;
   }
 }
 
@@ -105,6 +114,9 @@ void updateSetPoint(float newSetPoint){
 }
 
 void loopBlower(float flow){
+  if(manualFlow){
+    setPoint = manualSweep;
+  }
   flow *= -1;
   previousTime = currentTime;
   currentTime = millis() - firstTime;

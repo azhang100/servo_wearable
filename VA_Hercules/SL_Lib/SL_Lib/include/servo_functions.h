@@ -258,7 +258,7 @@ void O2_sensor_init(void);
 /* Read the CO2 value */
 //==============================================================================
 //float get_CO2_val(void);
-void get_CO2_val(void);
+float get_CO2_val(void);
 //==============================================================================
 
 /* Read the O2 value */

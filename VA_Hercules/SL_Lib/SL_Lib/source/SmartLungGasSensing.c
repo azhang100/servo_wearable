@@ -248,11 +248,11 @@ void FDO2Data(uint8_t *cmd, uint32 cmdLength, struct Oxysensorinfo* o2Sensor)
         token = strtok(NULL, s);
         o2Sensor[0].partialOxy = atof(token);
         o2Sensor[0].partialOxy *= 0.001;
-        printf("[sweeepO2=%f\n", o2Sensor[0].partialOxy);
+        printf("O2 Concentration: %f hPa\n", o2Sensor[0].partialOxy);
         token = strtok(NULL, s);
         o2Sensor[0].temperature = atof(token);
         o2Sensor[0].temperature *= 0.001;
-        printf("[temp=%f]\n", o2Sensor[0].temperature);
+        printf("temperature: %f C\n", o2Sensor[0].temperature);
         token = strtok(NULL, s);
         o2Sensor[0].status = llabs (atoll(token));          //unsigned 32 bit
 //        printf("status: %lu\n", o2Sensor[0].status);
@@ -271,12 +271,12 @@ void FDO2Data(uint8_t *cmd, uint32 cmdLength, struct Oxysensorinfo* o2Sensor)
         token = strtok(NULL, s);
         o2Sensor[0].ambientPressure = atoll(token);
         o2Sensor[0].ambientPressure *= 0.001;
-        printf("[pressure=%f]\n", o2Sensor[0].ambientPressure);
+        printf("Ambient Pressure: %f mbar\n", o2Sensor[0].ambientPressure);
         token = strtok(NULL, s);
         o2Sensor[0].relativeHumidity = llabs(atoll(token));   //unsigned 32 bit
         o2Sensor[0].relativeHumidity *= 0.001;
-        printf("[humidity=%f]\n", o2Sensor[0].relativeHumidity);
-        printf("[O2conc=%f]\n",(100*o2Sensor[0].partialOxy/o2Sensor[0].ambientPressure));
+        printf("Relative Humidity: %f%%\n", o2Sensor[0].relativeHumidity);
+        printf("O2 concentration: %f%%\n",(100*o2Sensor[0].partialOxy/o2Sensor[0].ambientPressure));
     }
 }
 

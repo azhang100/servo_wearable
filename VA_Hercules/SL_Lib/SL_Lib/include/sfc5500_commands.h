@@ -32,7 +32,7 @@ error_type dataTransmit(uint8_t* tFrame, uint8_t tFrameLength);
 
 error_type setpointUpdate(float targetConcentration, float targetFlow);
 
-error_type calculateSetPoint(float targetO2Concentration, float targetSweepFlow);
+error_type calculateSetPoint(float targetO2Concentration, float * targetSweepFlow);
 
 error_type measureCurrentFlows(float* flow1, float* flow2, float* flow3);
 

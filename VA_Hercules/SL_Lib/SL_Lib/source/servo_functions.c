@@ -69,6 +69,7 @@ static float time_elapsed = 0;
 
 extern uint8_t dataReceiveFlag;
 
+
 //=============================================================================
 uint8 Data_Display_Disabled;
 //=============================================================================
@@ -275,15 +276,16 @@ float get_avg_CO2_val(void)
 
 //=============================================================================
 //float get_CO2_val(void)
-void get_CO2_val(void)
+float get_CO2_val(void)
 {
     uint8 co2_buffer1[10] = {0,0,0,0,0,0,0,0,0,0};
     uint8 mul_buffer[10] = {0,0,0,0,0,0,0,0};
     char co2_value[5];
     char mul_value[5];
-    float current_co2_level = 0;
     float multiple = 0;
+    float current_co2_level = 0;
 //    uint8 random = 0;
+
 
 //    co2ReceivedFlag = 1;
     dataReceiveFlag = 1;
@@ -338,7 +340,7 @@ void get_CO2_val(void)
 
 //    random = rand ();
 //    current_co2_level = random *0.5;
-//    return current_co2_level1;
+    return current_co2_level;
 }
 
 //=============================================================================
@@ -367,7 +369,7 @@ float calculate_PWM(float expectedValue, float actualValue)
 //    double error;
 //    float derivative;
     float Duty_Cycle;
-
+    //actualValue = current_co2_level;
     // Calculate the error value
 //    if (currentFlags.co2IsUpdated == true)
 //    {
@@ -506,7 +508,7 @@ float calculate_PWM(float expectedValue, float actualValue)
 //    if (rtU.Enable == 0) {
 //        rtU.Enable = 1;
 //    }
-
+    //return 1;
     return Duty_Cycle;
 }
 
@@ -1808,3 +1810,36 @@ void reset_sensor (sensor_RST sensor)
 //    blower_speed_update (duty_level);
 //}
 //=============================================================================
+/*BRIAN'S CODE*/
+float elapsedTime = 0;
+float lastEGCO2 = 0;
+float integral = 0;
+float * egco2PID(float EGCO2){
+    elapsedTime += 0.01;
+    float tEGCO2 = 20;
+    float Kp = 1;
+    float Ki = 0;
+    float Kd = 0;
+    float tSweep = 0;
+    float error = EGCO2 - tEGCO2;
+    integral += (error*elapsedTime);
+    tSweep = (error*Kp) + (integral*Ki);
+    if(tSweep <  EGCO2 * 0.015){
+            tSweep =  EGCO2 * 0.015;
+            if(tSweep < 0.1){
+              tSweep = 0.1;
+            }
+          }
+    printf("[tSweep=%f]\n", tSweep);
+    return & tSweep;
+}
+
+//void sweepPID(float tSweep, float sweep){
+//    float currSweep = 0;
+//    SFC5500_SetSetpoint (NITROGEN, NORMALIZED,
+//                                tSweep, &status.state_error);
+//
+//    SFC5500_GetSetPoint (NITROGEN, NORMALIZED,
+//                                &currSweep, &status.state_error);
+//    printf("[sweep=%f%]", currSweep);
+//}

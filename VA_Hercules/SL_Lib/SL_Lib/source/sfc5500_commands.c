@@ -298,7 +298,7 @@ error_type measureCurrentFlows(float* flow1, float* flow2, float* flow3)
                         if (error == 0)
                              {
                             *flow3 *= 200.0f;
-                                printf("[sweepCO2=%f]\n", *flow2* 200.0f);
+                                printf("Measured CO2 flow: %6.2f%\t\t ml/min\n", *flow2* 200.0f);
                              }
 
                gioSetBit(gioPORTA, rs485_rx, 1U);
@@ -307,8 +307,11 @@ error_type measureCurrentFlows(float* flow1, float* flow2, float* flow3)
 
 //=============================================================================
 
-error_type calculateSetPoint(float targetO2Concentration, float targetSweepFlow)
+error_type calculateSetPoint(float targetO2Concentration, float* targetSweep)
 {
+
+    //printf("[tSWEEP@CHECK=%f]\n", *targetSweep);
+    float targetSweepFlow = *targetSweep;
     float targetAirSetPoint = 0.0f;           // normalized
     float currentAirSetPoint = 0.0f;          // normalized
     float targetO2SetPoint = 0.0f;            // normalized
@@ -318,17 +321,17 @@ error_type calculateSetPoint(float targetO2Concentration, float targetSweepFlow)
     float targetAirFlow = 0.0f;               // in ml/min
     dataPacket status;
 
-//    targetO2SetPoint = ((targetO2Concentration - 21)*targetSweepFlow)/10000; // normalized
+    targetO2SetPoint = ((targetO2Concentration - 21)*targetSweepFlow)/10000; // normalized
 
-//    targetO2SetPoint = (1/0.79)*((targetO2Concentration/100)-0.21)* (targetSweepFlow/100);  //normalized
+    targetO2SetPoint = (1/0.79)*((targetO2Concentration/100)-0.21)* (targetSweepFlow/100);  //normalized
 
- //   targetAirSetPoint = (targetSweepFlow - (targetO2SetPoint*100))/100;
+    targetAirSetPoint = (targetSweepFlow - (targetO2SetPoint*100))/100;
 
-    targetAirSetPoint = .1;
-
-    targetO2SetPoint = 0.0;
-
-    targetCO2SetPoint = 0.0;
+//    targetAirSetPoint = 0.01;
+//
+//    targetO2SetPoint = 0.0;
+//
+//    targetCO2SetPoint = 0.0;
 
     // read current setpoint (normalized)
 

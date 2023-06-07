@@ -72,15 +72,15 @@
 /* USER CODE BEGIN (2) */
 /* USER CODE END */
 
-uint8	emacAddress[6U] = 	{0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU};
-uint32 	emacPhyAddress	=	0U;
+uint8   emacAddress[6U] =   {0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU};
+uint32  emacPhyAddress  =   0U;
 
 int main(void)
 {
 /* USER CODE BEGIN (3) */
     char string[]={};
     float targetO2Concentration = 37.00f;       // in mmHg
-    float sweepFlow = 1000.00f;                  // in ml/min
+    float sweepFlow = 100.00f;                  // in ml/min
 
     error_type error = no_error;
     char productName[256];
@@ -99,14 +99,14 @@ int main(void)
 //    float targetConcentration = 100.0f;       // in %
 //    float targetO2Concentration = 37.00f;       // in mmHg
     float targetCO2Concentration = 0.00f;      // in mmHg
-    float tEGCO2 = 0.00f;                     // in mmHg
+    float tEGCO2 = 20.00f;                     // in mmHg
 //    float measuredCO2Concentration = 0.00f;
-//    float current_time = 0;
+    float current_time = 0;
 //    uint8_t co2_count = 0;
 //    float EGCO2 = 0.0f                      // in mmHg
 //    float Kp = 1;
-//    uint8_t p = 0;
-//    float tpCO2 = 40.0f;
+    uint8_t p = 0;
+    float tpCO2 = 40.0f;
 //    float tEGO2 = 0.00f;        // in mmHg
     float Ambient_Pressure = 0.00f;     // in mmHg
 
@@ -214,76 +214,89 @@ int main(void)
 //        calculateSetPoint(targetO2Concentration, sweepFlow);
 
         STATUS = Servo_On;
-        MODE = MEASUREMENT;
+        MODE = CO2_CONTROL;
 
         pwmStart( hetRAM1, pwm0);
         pwmSetDuty(hetRAM1, pwm0, 15);
 
-        while (1) {
-
-//            pwmSetDuty(hetRAM1, pwm0, 10);
-//            pwmSetDuty(hetRAM1, pwm0, 20);
-//            pwmSetDuty(hetRAM1, pwm0, 30);
-//            pwmStop(hetRAM1, pwm0);
+        //BRIAN CODE
+        while(1) {
             co2SensorInit();
             sciSetBaudrate (sciREG, 9600);
             CO2_sensor_init();
-            get_CO2_val();
-          //Change the controller setting
-            calculateSetPoint(targetO2Concentration, sweepFlow);
-          // Measure current sweep flows
-            measureCurrentFlows(&measuredAirFlow, &measuredO2Flow, &measuredCO2Flow);
-            measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
-            printf("[sweep=%f]\n", measuredSweepFlow);
-
-            sciSetBaudrate (sciREG, 19200);
-            inletO2Init();
+//            measureCurrentFlows(&measuredAirFlow, &measuredO2Flow, &measuredCO2Flow);
+//            measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
+            EGCO2 = get_CO2_val();
+            float* tSweep = egco2PID(&EGCO2);
+            calculateSetPoint(37, tSweep);
         }
 
+////        while (1) {
+//
+////            pwmSetDuty(hetRAM1, pwm0, 10);
+////            pwmSetDuty(hetRAM1, pwm0, 20);
+////            pwmSetDuty(hetRAM1, pwm0, 30);
+////            pwmStop(hetRAM1, pwm0);
+//            co2SensorInit();
+//            sciSetBaudrate (sciREG, 9600);
+//            CO2_sensor_init();
+//            get_CO2_val();
+//          //Change the controller setting
+//            calculateSetPoint(targetO2Concentration, sweepFlow);
+//          // Measure current sweep flows
+//            measureCurrentFlows(&measuredAirFlow, &measuredO2Flow, &measuredCO2Flow);
+//            measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
+//            printf("Measured Sweep flow: %6.2f%\t\t ml/min\n", measuredSweepFlow);
+//
+//            sciSetBaudrate (sciREG, 19200);
+//            inletO2Init();
+////        }
+//
 //        while (1) {
 //
 //                         if (STATUS == Servo_On)
 //                         {
-//                             if (MODE == MEASUREMENT)
-//                             {
-//                                 pwm_pre_error = 0;
-//                                 pwm_integral = 0;
-//                                 pwm_integralUpdated = 0;
-//                                 pwm_saturation = 0;
-//                                 pwm_error = 0;
-//                                 pwm_derivative = 0;
-//                                 EGCO2 = 0;
-//                                 pCO2 = 0;
-//
-//                                 while (EGCO2 >= 0.8*pCO2)
-//                                 {
-//                                      tEGCO2 = 0;
-//                                 }
-//
-//                                sweepFlow = 0.04;
-//                                for (p=0; p<80; p++)
-//                                {
-//                                    //Change the controller setting
-//                                     calculateSetPoint(targetO2Concentration, sweepFlow);
-//                                     // Measure current sweep flows
-//                                     measureCurrentFlows(&measuredAirFlow, &measuredO2Flow, &measuredCO2Flow);
-//                                     measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
-//                                     printf("Measured Sweep flow: %6.2f%\t\t ml/min\n", measuredSweepFlow);
-//                                     // request co2 value
-//                                     sciSetBaudrate (sciREG, 9600);
-//                                     co2SensorInit();
-//                                     get_CO2_val();
-//                                     if (EGCO2 >= pCO2)
-//                                     {
-//                                         pCO2 = EGCO2;
-//                                     }
-//                                     store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*20200.0f, measuredSweepFlow, Ambient_Pressure);
-//                                }
-//                                tEGCO2 = calculate_tEGCO2(tpCO2, pCO2);
-//                                // Store the collected data
-//                                store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*10000.0f, measuredSweepFlow, Ambient_Pressure);
-//                                MODE = CO2_CONTROL;
-//                             }
+////                             if (MODE == MEASUREMENT)
+////                             {
+////                                 pwm_pre_error = 0;
+////                                 pwm_integral = 0;
+////                                 pwm_integralUpdated = 0;
+////                                 pwm_saturation = 0;
+////                                 pwm_error = 0;
+////                                 pwm_derivative = 0;
+////                                 EGCO2 = 0;
+////                                 pCO2 = 0;
+////
+//////                                 while (EGCO2 >= 0.8*pCO2)
+//////                                 {
+//////                                      tEGCO2 = 0;
+//////                                 }
+////
+////                                sweepFlow = 0.4;
+////                                for (p=0; p<80; p++)
+////                                {
+////                                    //Change the controller setting
+////                                     calculateSetPoint(targetO2Concentration, sweepFlow);
+////                                     // Measure current sweep flows
+////                                     measureCurrentFlows(&measuredAirFlow, &measuredO2Flow, &measuredCO2Flow);
+////                                     measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
+////                                     printf("Measured Sweep flow: %6.2f%\t\t ml/min\n", measuredSweepFlow);
+////                                     // request co2 value
+////                                     co2SensorInit();
+////                                     sciSetBaudrate (sciREG, 9600);
+////                                     CO2_sensor_init();
+////                                     get_CO2_val();
+////                                     if (EGCO2 >= pCO2)
+////                                     {
+////                                         pCO2 = EGCO2;
+////                                     }
+//////                                     store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*20200.0f, measuredSweepFlow, Ambient_Pressure);
+////                                }
+////                                tEGCO2 = calculate_tEGCO2(tpCO2, pCO2);
+////                                // Store the collected data
+//////                                store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*10000.0f, measuredSweepFlow, Ambient_Pressure);
+////                                MODE = CO2_CONTROL;
+////                             }
 //
 //                             /* CO2 Level Control Mode Control Loop */
 //                      if (MODE == CO2_CONTROL)
@@ -291,11 +304,13 @@ int main(void)
 //                          for (p=0; p<240; p++)
 //                          {
 //                              // request co2 value
-//                              sciSetBaudrate (sciREG, 9600);
 //                              co2SensorInit();
+//                              sciSetBaudrate (sciREG, 9600);
+//                              CO2_sensor_init();
 //                              get_CO2_val();
 //                              // Calculate the target Sweep Flow
 //                              sweepFlow = calculate_PWM(tEGCO2, EGCO2);
+//                              printf("tsweepFlow: %6.2f%\t\t\n", sweepFlow);
 //                              //Change the controller setting
 //                              calculateSetPoint(targetO2Concentration, sweepFlow);
 //                              // Measure current sweep flows
@@ -305,40 +320,40 @@ int main(void)
 //                              printf("tEGCO2: %6.2f%\t\t mmHg\n", tEGCO2);
 //                              printf("Measured Sweep flow: %6.2f%\t\t ml/min\n", measuredSweepFlow);
 //                              // Store the collected data
-//                              store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*10000.0f, measuredSweepFlow, Ambient_Pressure);
+// //                             store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*10000.0f, measuredSweepFlow, Ambient_Pressure);
 //                          }
 //       //                          MODE = MEASUREMENT;
 //       //                      }
 //
 //
-//                             if (MODE == CO2_CONTROL)
-//                             {
-//                                 for (p=0; p<240; p++)
-//                                 {
-////                                     pressError = ABP2_getPressure(Ambient_Pressure_Sensor, &Ambient_Pressure);
-//                                     // request co2 value
-//                                     get_CO2_val();
-//                                     // Calculate the target Sweep Flow
-//                                     sweepFlow = calculate_PWM(tEGCO2, EGCO2);
-//                                     //Change the controller setting
-//                                     calculateSetPoint(targetO2Concentration, sweepFlow);
-//                                     // Measure current sweep flows
-//                                     measureCurrentFlows(&measuredAirFlow, &measuredO2Flow, &measuredCO2Flow);
-//                                     measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
-//                                     // Display the value
-//                                     printf("tEGCO2: %6.2f%\t\t mmHg\n", tEGCO2);
-//                                     printf("Measured Sweep flow: %6.2f%\t\t ml/min\n", measuredSweepFlow);
-//                                     // Store the collected data
-//                                     store_data(current_time, tEGCO2, targetO2Concentration, EGCO2, measuredSweepFlow, measuredO2Flow, Ambient_Pressure);
-//       //                              store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*10000.0f, measuredSweepFlow, Ambient_Pressure);
-//                                 }
-//                                 MODE = MEASUREMENT;
-//                             }
-//
+////                             if (MODE == CO2_CONTROL)
+////                             {
+////                                 for (p=0; p<240; p++)
+////                                 {
+//////                                     pressError = ABP2_getPressure(Ambient_Pressure_Sensor, &Ambient_Pressure);
+////                                     // request co2 value
+////                                     get_CO2_val();
+////                                     // Calculate the target Sweep Flow
+////                                     sweepFlow = calculate_PWM(tEGCO2, EGCO2);
+////                                     //Change the controller setting
+////                                     calculateSetPoint(targetO2Concentration, sweepFlow);
+////                                     // Measure current sweep flows
+////                                     measureCurrentFlows(&measuredAirFlow, &measuredO2Flow, &measuredCO2Flow);
+////                                     measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
+////                                     // Display the value
+////                                     printf("tEGCO2: %6.2f%\t\t mmHg\n", tEGCO2);
+////                                     printf("Measured Sweep flow: %6.2f%\t\t ml/min\n", measuredSweepFlow);
+////                                     // Store the collected data
+//// //                                    store_data(current_time, tEGCO2, targetO2Concentration, EGCO2, measuredSweepFlow, measuredO2Flow, Ambient_Pressure);
+////       //                              store_data(current_time, tEGCO2, pCO2, EGCO2, sweepFlow*10000.0f, measuredSweepFlow, Ambient_Pressure);
+////                                 }
+////                                 //MODE = MEASUREMENT;
+////                             }
+////
 //                         }
 //                         }
-//
-///* USER CODE END */
+//        }
+/* USER CODE END */
 
     return 0;
 }

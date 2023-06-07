@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;SL_Lib/RemoteSystemsTempFiles&apos;" deleteContents="false" description="Delete resource &apos;SL_Lib/RemoteSystemsTempFiles&apos;" element1="/SL_Lib/RemoteSystemsTempFiles" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1686084788965"/>
+</session>

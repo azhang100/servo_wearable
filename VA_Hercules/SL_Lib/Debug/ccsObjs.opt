@@ -23,6 +23,7 @@
 "./SL_Lib/source/pom.obj"
 "./SL_Lib/source/rti.obj"
 "./SL_Lib/source/sci.obj"
+"./SL_Lib/source/serial.obj"
 "./SL_Lib/source/servo_functions.obj"
 "./SL_Lib/source/servo_sensirion.obj"
 "./SL_Lib/source/servo_ventilation.obj"

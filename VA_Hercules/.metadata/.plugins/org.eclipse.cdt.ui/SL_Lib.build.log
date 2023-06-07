@@ -1,7 +1,7 @@
 
 **** Build of configuration Debug for project SL_Lib ****
 
-"C:\\ti\\ccs1230\\ccs\\utils\\bin\\gmake" -k -j 12 all -O 
+"C:\\ti\\ccs1230\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
  
 gmake[1]: 'SL_Lib.out' is up to date.
 

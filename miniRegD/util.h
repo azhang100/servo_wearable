@@ -28,9 +28,9 @@
 
 bool isSlowPrint = true;
 
-void resetSlowPrint() {
+void resetSlowPrint(){
   static long lastTime = millis();
-  if ((millis() - lastTime) > 1000) {
+  if ((millis()-lastTime) > 1000){
     lastTime = millis();
     isSlowPrint = true;
   } else {
@@ -43,16 +43,16 @@ void resetSlowPrint() {
 #define PIN_LED PC13
 #define LED_DURATION 200
 
-void setupUtil() {
+void setupUtil(){
   pinMode(PIN_LED, OUTPUT);
   DBSERIAL.begin(9600); // debugging
   PRINT1("Debug Serial start");
   Wire.begin();
-
+  
 }
 
-void loopUtil() {
-  digitalWrite(PIN_LED, millis() % (LED_DURATION * 2) > LED_DURATION);
+void loopUtil(){
+  digitalWrite(PIN_LED,millis()%(LED_DURATION*2) > LED_DURATION);
   // PRINT1("loop");
 }
 
@@ -62,10 +62,10 @@ static const long V_DIV = 11000; // 1M / 100K
 
 // overflow 2,147,483,647
 // TODO: use long instead of float
-int analogReadToMillivolt(int n) {
+int analogReadToMillivolt(int n){
   // performs calculation in float to prevent overflow
   float res = float(n);
-  res = res * 5120 * V_DIV / 1024 / 1024;
+  res = res*5120*V_DIV/1024/1024;
   return int(res);
 }
 

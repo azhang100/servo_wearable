@@ -11,9 +11,8 @@
 #define PIN_PRESSURE1 PA4
 #define GAIN_PRESSURE1 100
 #define PIN_PRESSURE2 PA5
-#define PIN_PRESSURE3 PA6
+#define PIN_PRESSURE3 PA6 
 #define PIN_PRESSURE4 PA7
-#define senseVoltage PA0
 
 float heaterVal = 0;
 float pumpVal = 0;
@@ -27,7 +26,7 @@ int minHeater = 0;
 int maxPump = 255;
 int minPump = 0;
 
-void setupAnalog() {
+void setupAnalog(){
   PRINT1("setting up analog");
   pinMode(PIN_PUMP, OUTPUT);
   pinMode(PIN_HEATER, OUTPUT);
@@ -39,65 +38,55 @@ void setupAnalog() {
   digitalWrite(PIN_PUMP, 255); // approx 30% power // TODO: it freezes here
   digitalWrite(PIN_HEATER, 255); // approx 30% power
   delay(1000);
-  digitalWrite(PIN_PUMP, 0);
-  digitalWrite(PIN_HEATER, 0);
+  digitalWrite(PIN_PUMP, 0); 
+  digitalWrite(PIN_HEATER, 0); 
   PRINT1("done");
 }
 
-void loopAnalog() {
+void loopAnalog(){
   int p1 = analogRead(PIN_PRESSURE1);
   int p2 = analogRead(PIN_PRESSURE2);
   int p3 = analogRead(PIN_PRESSURE3);
   int p4 = analogRead(PIN_PRESSURE4);
-
-  SLOWPRINT4NL("p1:", p1, ",p2:", p2); SLOWPRINT4(", p3:", p3, ",p4:", p4);
+  
+  SLOWPRINT4NL("p1:",p1,",p2:",p2); SLOWPRINT4(", p3:",p3,",p4:",p4);
 }
 
-float measureVoltage() {
-  float voltage = analogRead(senseVoltage);
-  voltage = (2 * 3.3 * voltage) / 4096;
-  return voltage;
-}
-
-void measureChamberPressure() {
-  float pressureMilliVolts = analogRead(PIN_PRESSURE4) * 3300 / 4096;
-  float voltage = 5; //measureVoltage();
-  float maxVol = 0.9 * voltage * 1000;
-  float minVol = 0.1 * voltage * 1000;
-  pressure = map(pressureMilliVolts, minVol, maxVol, 0, 7500);
+void measureChamberPressure(){
+  pressure = analogRead(PIN_PRESSURE4);
   sendCommand("pressureChamber", String(pressure));
 }
 
 
 
-void measuretPressure() {
+void measuretPressure(){
   sendCommand("tPressure", String(tPressure));
 }
 
-void settPressure(int input) {
-  tPressure = input;
+void settPressure(int newtPressure){
+  tPressure = newtPressure;
 }
 
-void measureHeaterPWM() {
+void measureHeaterPWM(){
   sendCommand("heaterPWM", String(heaterVal));
 }
 
 
-void measurePumpPWM() {
+void measurePumpPWM(){
   sendCommand("pumpPWM", String(pumpVal));
 }
 
-void setHeaterPWM(float temp, float tTemp) { //seems to max out temp at ~23.85 with blower off and running full power
-  if (tTemp - temp > 1) {                   //seems to max out at ~2 with blower on and running full power
+void setHeaterPWM(float temp, float tTemp){ //seems to max out temp at ~23.85 with blower off and running full power
+  if(tTemp - temp > 1){                     //seems to max out at ~2 with blower on and running full power
     heaterVal = maxHeater;
     digitalWrite(PIN_HEATER, heaterVal);
   }
-  else if (temp < tTemp) {
-    float tempHeaterVal = heaterProp * (tTemp - temp);
-    if (tempHeaterVal > maxHeater) {
+  else if (temp < tTemp){
+    float tempHeaterVal = heaterProp*(tTemp - temp);
+    if(tempHeaterVal > maxHeater){
       heaterVal = maxHeater;
     }
-    else if (tempHeaterVal < minHeater) {
+    else if(tempHeaterVal < minHeater){
       heaterVal = minHeater;
     }
     else {
@@ -105,23 +94,23 @@ void setHeaterPWM(float temp, float tTemp) { //seems to max out temp at ~23.85 w
     }
     digitalWrite(PIN_HEATER, heaterVal);
   }
-  else {
+  else{
     heaterVal = minHeater;
     digitalWrite(PIN_HEATER, 0);
   }
 }
 
-void setPumpPWM(bool pump) { //doesn't seem to change pressure -- sensor in differeent compartment???
-  if (tPressure - pressure > 1) {
+void setPumpPWM(bool pump){ 
+  if(tPressure - pressure > 1){
     pumpVal = maxPump;
     digitalWrite(PIN_PUMP, pumpVal);
   }
-  else if (pressure < tPressure) {
-    float tempPumpVal = pressureProp * (tPressure - pressure);
-    if (tempPumpVal > maxPump) {
+  else if (pressure < tPressure){
+    float tempPumpVal = pressureProp*(tPressure - pressure);
+    if(tempPumpVal > maxPump){
       pumpVal = maxPump;
     }
-    else if (tempPumpVal < minPump) {
+    else if(tempPumpVal < minPump){
       pumpVal = minPump;
     }
     else {
@@ -129,13 +118,13 @@ void setPumpPWM(bool pump) { //doesn't seem to change pressure -- sensor in diff
     }
     digitalWrite(PIN_PUMP, pumpVal);
   }
-  else {
+  else{
     pumpVal = minPump;
     digitalWrite(PIN_PUMP, 0);
   }
 }
 
-void checkPumpPWM() {
+void checkPumpPWM(){
   setPumpPWM(pressure < tPressure);
 }
 

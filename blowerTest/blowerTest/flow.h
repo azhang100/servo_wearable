@@ -43,11 +43,12 @@ void setupFlow(){
   BTSERIAL.println(flowSensor.flowOffset);
   PRINT1("done");
 }
-
+//float flow = 0;
 float loopFlow(){
   timer++;
+//  float currFlow = flowSensor.readFlow(); // read flow from sensor and print
+//  flow = ((0.9375)*flow) + ((0.0625)*currFlow);
   float flow = flowSensor.readFlow(); // read flow from sensor and print
-
   if(flowSensor.checkRange(flow)){
     DBSERIAL.print("flow exceeded sensor limits:  ");
     DBSERIAL.print(flow);

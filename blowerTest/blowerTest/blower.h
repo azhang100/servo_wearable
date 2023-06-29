@@ -18,6 +18,7 @@ float setPoint = 1;
 //float Kp = 700;
 //float Ki = 0.05;
 // 100, .005, 20000
+//what was used: 800, 0.005, 1000
 float Kp = 800;
 float Ki = 0.005;
 float Kd = 1000;
@@ -29,7 +30,8 @@ float firstTime;
 float error = 0;
 int health = 10000000;
 float healthTime;
-float manualSweep = 0;
+float manualSweep = 1;
+bool manualFlow = false;
 
 
 void settSweep(float newSweep){
@@ -38,6 +40,12 @@ void settSweep(float newSweep){
 
 void setmanualSweep(float newSweep){
   manualSweep = newSweep;
+  if(manualSweep == 0){
+    manualFlow = false;
+  }
+  else{
+    manualFlow = true;
+  }
 }
 
 void spinBlower(int b1, int b2){
@@ -59,7 +67,7 @@ void setupBlower(){
   
   //PRINT1("blower 1");
   //spinBlower(255,0);
-  //delay(3000);
+  //delay(30000);
   PRINT1("blower 2");
   //spinBlower(0,255);
   //delay(3000);
@@ -78,12 +86,14 @@ void setSensorHealth(int newHealth){
 }
 //sensor health: healthy | reserved | humidity | no response | X | X | X | X |
 void sensorHealth(){
-  if(millis() - healthTime > 10000){
-    health = 00010000;
-  }
-  if(health != 10000000){
-    digitalWrite(buzzer, HIGH);
-  }
+//  if(millis() - healthTime > 10000){
+//    health = 00010000;
+//  }
+//  if(health != 10000000){
+//    digitalWrite(buzzer, HIGH);
+//    manualSweep = 1;
+//    manualFlow = true;
+//  }
 }
 
 void setblowerKp(float newKp){
@@ -105,6 +115,9 @@ void updateSetPoint(float newSetPoint){
 }
 
 void loopBlower(float flow){
+  if(manualFlow){
+    setPoint = manualSweep;
+  }
   flow *= -1;
   previousTime = currentTime;
   currentTime = millis() - firstTime;

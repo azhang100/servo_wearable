@@ -4,93 +4,91 @@
 #include "Arduino.h"
 #include <Wire.h>
 
-void checkInput() {
+void runCommand(String inputType, String inputVal);
+
+void checkInput() { // serChannel is either Serial or Serial2
   static String inputType = ""; // change to char[] to increase speed
-  static String functionInput = "";
+  static String inputVal = "";
+  static String inputBuf = "";
   while (Serial.available()) {
     char c = Serial.read();
+    Serial2.write(c);
     if (c == '[') { // start delim
-      inputType = "";
-    } else if (c == '=') { // end delim
-      break;
+      inputBuf = "";
+    } else if (c == '=') { 
+      inputType = inputBuf;
+      inputBuf = "";
+    } else if (c == ']') { 
+      inputVal = inputBuf;
+      inputBuf = "";
+      runCommand(inputType, inputVal);
     } else              {
-      inputType += c;
-    }
-  }
-  while (Serial.available()) {
-    char c = Serial.read();
-    if (c != ']') { // end delim
-      functionInput += c;
-    }
-  }
-  if (inputType == "tTemp") {
-    settTemp(functionInput.toInt());
-    functionInput = "";
-    inputType = "";
-  }
-  else if (inputType == "tPressure") {
-    settPressure(functionInput.toInt());
-    functionInput = "";
-    inputType = "";
-  }
-  else if (inputType == "tegco2") {
-    settegco2(functionInput.toInt());
-    functionInput = "";
-    inputType = "";
-  }
-  else if (inputType == "") {
-
-  }
-  else {
-    PRINT2("ERROR: INVALID INPUT ", inputType);
-    functionInput = "";
-    inputType = "";
-  }
-}
-
-void checkInput2() {
-  static String inputType = ""; // change to char[] to increase speed
-  static String functionInput = "";
-  while (Serial2.available()) {
-    char c = Serial2.read();
-    if (c == '[') { // start delim
-      inputType = "";
-    } else if (c == '=') { // end delim
-      break;
-    } else              {
-      inputType += c;
+      inputBuf += c;
     }
   }
   while (Serial2.available()) {
     char c = Serial2.read();
-    if (c != ']') { // end delim
-      functionInput += c;
+    Serial.write(c);
+    if (c == '[') { // start delim
+      inputBuf = "";
+    } else if (c == '=') { 
+      inputType = inputBuf;
+      inputBuf = "";
+    } else if (c == ']') { 
+      inputVal = inputBuf;
+      inputBuf = "";
+      runCommand(inputType, inputVal);
+    } else              {
+      inputBuf += c;
     }
-  }
-  if (inputType == "tTemp") {
-    settTemp(functionInput.toInt());
-    functionInput = "";
-    inputType = "";
-  }
-  else if (inputType == "tPressure") {
-    settPressure(functionInput.toInt());
-    functionInput = "";
-    inputType = "";
-  }
-  else if (inputType == "tegco2") {
-    settegco2(functionInput.toInt());
-    functionInput = "";
-    inputType = "";
-  }
-  else if (inputType == "") {
-
-  }
-  else {
-    PRINT2("ERROR: INVALID INPUT ", inputType);
-    functionInput = "";
-    inputType = "";
   }
 }
 
+void runCommand(String inputType, String inputVal){
+  int type = 0;
+  if(inputType == "tTemp"){
+    type = 1;
+  }
+  else if(inputType == "tPressure"){
+    type = 2;
+  }
+  else if(inputType == "tegco2"){
+    type = 3;
+  }
+  else if(inputType == "sweepP"){
+    type = 4;
+  }
+  else if(inputType == "sweepI"){
+    type = 5;
+  }
+  else if(inputType == "sweepD"){
+    type = 6;
+  }
+  switch (type){
+    case 1:
+      settTemp(inputVal.toInt());
+      break;
+    case 2:
+      settPressure(inputVal.toInt());
+      break;
+    case 3:
+      settegco2(inputVal.toInt());
+      break;
+    case 4:
+      setsweepP(inputVal.toFloat());
+      break;
+    case 5:
+      setsweepI(inputVal.toFloat());
+      break;
+    case 6:
+      setsweepD(inputVal.toFloat());
+      break;
+    case 0:
+      PRINT1("ERROR: BLANK INPUT");
+      break;
+    default:
+      PRINT2("ERROR: INVALID INPUT ", inputType);
+  }
+}
 
 #endif

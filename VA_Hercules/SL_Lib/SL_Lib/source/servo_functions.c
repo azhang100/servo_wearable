@@ -334,7 +334,7 @@ float get_CO2_val(void)
     current_co2_level *= 0.00076;
     current_co2_level *= multiple;
 
-    printf("[egco2=%f]\n", current_co2_level);
+    printf("egco2,%f\n", current_co2_level);
 
 //    rtU.current_co2_level = current_co2_level;
 
@@ -1811,26 +1811,62 @@ void reset_sensor (sensor_RST sensor)
 //}
 //=============================================================================
 /*BRIAN'S CODE*/
-float elapsedTime = 0;
+float tEGCO2 = 20;
+float elapsedTimeCO2 = 1;
+float lastCO2 = 0;
+float integralCO2 = 0;
+float tSweepCO2;
+float * CO2PID(float * EGCO2){
+//    float Kp = 0.002;
+    float Kp = 0.0001;
+    float Ki = 0.000058;
+    //float Ki = 0;
+    float Kd = 0;
+    float error = tEGCO2 - *EGCO2;
+    integralCO2 += (error*elapsedTimeCO2);
+    tSweepCO2 = (error*Kp) + (integralCO2*Ki);
+    if(tSweepCO2 < 0){
+        tSweepCO2 = 0;
+    }
+    if(tSweepCO2 > 1){
+        tSweepCO2 = 1;
+    }
+    if(*EGCO2 < 1){
+        integralCO2 = 0;
+        tSweepCO2 = 0;
+    }
+    tSweepCO2 = 0;
+    return & tSweepCO2;
+}
+
+float elapsedTime = 1;
 float lastEGCO2 = 0;
 float integral = 0;
+float tSweep = 0;
 float * egco2PID(float EGCO2){
-    elapsedTime += 0.01;
-    float tEGCO2 = 20;
-    float Kp = 1;
-    float Ki = 0;
+//    float Kp = 0.1;
+//    float Ki = 0.02;
+//    float Kd = 0;
+    float Kp = 0.1;
+    float Ki = 0.02;
     float Kd = 0;
-    float tSweep = 0;
     float error = EGCO2 - tEGCO2;
     integral += (error*elapsedTime);
     tSweep = (error*Kp) + (integral*Ki);
-    if(tSweep <  EGCO2 * 0.015){
-            tSweep =  EGCO2 * 0.015;
-            if(tSweep < 0.1){
-              tSweep = 0.1;
-            }
-          }
-    printf("[tSweep=%f]\n", tSweep);
+    if(tSweep <  EGCO2 * 0.018){
+        integral = ((EGCO2 * 0.018)-(error*Kp))/Ki;
+        tSweep =  EGCO2 * 0.018;
+        if(tSweep < .1){
+          tSweep = .1;
+        }
+      }
+    if(tSweep > 8){
+        integral = (8-(error*Kp))/Ki;
+        tSweep =  8;
+    }
+    //printf("airSweepCheck=%f\n", tSweep);
+    //tSweep = .3;
+    //tSweep =  EGCO2 * 0.015;
     return & tSweep;
 }
 

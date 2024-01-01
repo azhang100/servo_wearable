@@ -1,3 +1,2 @@
-2023/05/23-13:07:58.817 1648 Reusing MANIFEST C:\Users\Owner\Documents\SL_Lib\.jxbrowser.userdata\Default\Local Storage\leveldb/MANIFEST-000001
-2023/05/23-13:07:58.820 1648 Recovering log #3
-2023/05/23-13:07:58.821 1648 Reusing old log C:\Users\Owner\Documents\SL_Lib\.jxbrowser.userdata\Default\Local Storage\leveldb/000003.log 
+2023/06/29-14:39:05.620 354c Creating DB C:\Users\Owner\Documents\GitHub\servoreg\VA_Hercules\.jxbrowser.userdata\Default\Local Storage\leveldb since it was missing.
+2023/06/29-14:39:05.636 354c Reusing MANIFEST C:\Users\Owner\Documents\GitHub\servoreg\VA_Hercules\.jxbrowser.userdata\Default\Local Storage\leveldb/MANIFEST-000001

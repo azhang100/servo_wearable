@@ -1,8 +1,40 @@
 
 **** Build of configuration Debug for project SL_Lib ****
 
-"C:\\ti\\ccs1230\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+"C:\\ti\\ccs1230\\ccs\\utils\\bin\\gmake" -k -j 12 all -O 
  
-gmake[1]: 'SL_Lib.out' is up to date.
+Building file: "../SL_Lib/source/sys_main.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1230/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -me --include_path="C:/Users/Owner/Documents/GitHub/servoreg/VA_Hercules/SL_Lib" --include_path="C:/Users/Owner/Documents/GitHub/servoreg/VA_Hercules/SL_Lib/SL_Lib/include" --include_path="C:/ti/ccs1230/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="SL_Lib/source/sys_main.d_raw" --obj_directory="SL_Lib/source"  "../SL_Lib/source/sys_main.c"
+"../SL_Lib/source/sys_main.c", line 128: warning #225-D: function "_enable_interrupt_" declared implicitly
+"../SL_Lib/source/sys_main.c", line 239: warning #225-D: function "egco2PID" declared implicitly
+"../SL_Lib/source/sys_main.c", line 239: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "float *"
+"../SL_Lib/source/sys_main.c", line 409: warning #112-D: statement is unreachable
+"../SL_Lib/source/sys_main.c", line 79: warning #179-D: variable "string" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 80: warning #179-D: variable "targetO2Concentration" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 81: warning #179-D: variable "sweepFlow" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 83: warning #179-D: variable "error" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 84: warning #179-D: variable "productName" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 92: warning #179-D: variable "measuredSweepFlow" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 93: warning #179-D: variable "measuredAirFlow" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 94: warning #179-D: variable "measuredCO2Flow" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 95: warning #179-D: variable "measuredO2Flow" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 99: warning #179-D: variable "targetCO2Concentration" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 100: warning #179-D: variable "tEGCO2" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 102: warning #179-D: variable "current_time" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 106: warning #179-D: variable "p" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 107: warning #179-D: variable "tpCO2" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 109: warning #179-D: variable "Ambient_Pressure" was declared but never referenced
+"../SL_Lib/source/sys_main.c", line 221: warning #179-D: variable "co2reg" was declared but never referenced
+Finished building: "../SL_Lib/source/sys_main.c"
+ 
+Building target: "SL_Lib.out"
+Invoking: Arm Linker
+"C:/ti/ccs1230/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -me -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"SL_Lib.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs1230/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" -i"C:/ti/ccs1230/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="SL_Lib_linkInfo.xml" --rom_model -o "SL_Lib.out" "./SL_Lib/source/SFC5500Device.obj" "./SL_Lib/source/SmartLungGasSensing.obj" "./SL_Lib/source/adc.obj" "./SL_Lib/source/can.obj" "./SL_Lib/source/crc.obj" "./SL_Lib/source/dabort.obj" "./SL_Lib/source/dcc.obj" "./SL_Lib/source/ecap.obj" "./SL_Lib/source/emac.obj" "./SL_Lib/source/eqep.obj" "./SL_Lib/source/errata_SSWF021_45.obj" "./SL_Lib/source/esm.obj" "./SL_Lib/source/etpwm.obj" "./SL_Lib/source/gio.obj" "./SL_Lib/source/het.obj" "./SL_Lib/source/i2c.obj" "./SL_Lib/source/lin.obj" "./SL_Lib/source/mdio.obj" "./SL_Lib/source/mibspi.obj" "./SL_Lib/source/notification.obj" "./SL_Lib/source/phy_dp83640.obj" "./SL_Lib/source/pinmux.obj" "./SL_Lib/source/pom.obj" "./SL_Lib/source/rti.obj" "./SL_Lib/source/sci.obj" "./SL_Lib/source/serial.obj" "./SL_Lib/source/servo_functions.obj" "./SL_Lib/source/servo_sensirion.obj" "./SL_Lib/source/servo_ventilation.obj" "./SL_Lib/source/sfc5500_commands.obj" "./SL_Lib/source/sfc5500_data.obj" "./SL_Lib/source/spi.obj" "./SL_Lib/source/sys_core.obj" "./SL_Lib/source/sys_dma.obj" "./SL_Lib/source/sys_intvecs.obj" "./SL_Lib/source/sys_main.obj" "./SL_Lib/source/sys_mpu.obj" "./SL_Lib/source/sys_pcr.obj" "./SL_Lib/source/sys_phantom.obj" "./SL_Lib/source/sys_pmm.obj" "./SL_Lib/source/sys_pmu.obj" "./SL_Lib/source/sys_selftest.obj" "./SL_Lib/source/sys_startup.obj" "./SL_Lib/source/sys_vim.obj" "./SL_Lib/source/system.obj" "../SL_Lib/source/sys_link.cmd"  -lrtsv7R4_T_le_v3D16_eabi.lib 
+<Linking>
+warning #10441-D: Generating trampoline to symbol "read", which is in a non-executable section
+warning #10441-D: Generating trampoline to symbol "read", which is in a non-executable section
+Finished building target: "SL_Lib.out"
+ 
 
 **** Build Finished ****

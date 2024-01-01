@@ -123,7 +123,6 @@ error_type SFC5500_SetSetpoint (gasSource childAddr, scaling_type scaling,
     uint8_t dataByteNum = 0;
 
     memset(receiveBuffer, 0, sizeof(receiveBuffer));
-
     // Setting case
     floatToData(&targetSetPoint, &dataBytes[1]);
 
@@ -321,11 +320,86 @@ error_type calculateSetPoint(float targetO2Concentration, float* targetSweep)
     float targetAirFlow = 0.0f;               // in ml/min
     dataPacket status;
 
-    targetO2SetPoint = ((targetO2Concentration - 21)*targetSweepFlow)/10000; // normalized
+//    targetO2SetPoint = ((targetO2Concentration - 21)*targetSweepFlow)/10000; // normalized
+//
+//    targetO2SetPoint = (1/0.79)*((targetO2Concentration/100)-0.21)* (targetSweepFlow/100);  //normalized
+//
+//    targetAirSetPoint = (targetSweepFlow - (targetO2SetPoint*100))/100;
+//    targetAirSetPoint =(*targetSweep + 0.0109)/5.95;
+      targetAirSetPoint = (*targetSweep*0.1204)+0.0313;
+// / 6.21
+//    targetAirSetPoint = 0.01;
+//
+//    targetO2SetPoint = 0.0;
+//
+//    targetCO2SetPoint = 0.0;
 
-    targetO2SetPoint = (1/0.79)*((targetO2Concentration/100)-0.21)* (targetSweepFlow/100);  //normalized
+    // read current setpoint (normalized)
 
-    targetAirSetPoint = (targetSweepFlow - (targetO2SetPoint*100))/100;
+    gioSetBit(gioPORTA, rs485_rx, 0U);
+
+
+//   while (targetCO2SetPoint != currentCO2SetPoint)
+//   {
+       // read current setpoint (normalized)
+       SFC5500_SetSetpoint (NITROGEN, NORMALIZED,
+                            targetAirSetPoint, &status.state_error);
+
+       SFC5500_GetSetPoint (NITROGEN, NORMALIZED,
+                            &currentAirSetPoint, &status.state_error);
+
+
+       // read current setpoint (normalized)
+       SFC5500_SetSetpoint (OXYGEN, NORMALIZED,
+                            targetAirSetPoint, &status.state_error);
+
+
+       SFC5500_GetSetPoint (OXYGEN, NORMALIZED,
+                            &currentAirSetPoint, &status.state_error);
+
+//       printf("current Air setpoint is %.2f ml/min\n", currentSweepSetPoint* 10000.0f);
+
+//   }
+
+//       SFC5500_SetSetpoint (CO2, NORMALIZED,
+//                            currentCO2SetPoint, &status.state_error);
+//
+//       SFC5500_GetSetPoint (CO2, NORMALIZED,
+//                                 &currentCO2SetPoint, &status.state_error);
+
+
+
+//       printf("current Oxygen setpoint is %.2f ml/min\n", currentO2SetPoint* 10000.0f);
+
+       gioSetBit(gioPORTA, rs485_rx, 1U);
+
+return no_error;
+}
+
+error_type calculateSetPointCO2(float targetO2Concentration, float * targetSweep)
+{
+    //printf("[tSWEEP@CHECK=%f]\n", *targetSweep);
+    //float targetSweepFlow = *targetSweep;
+    float targetAirSetPoint = 0.0f;           // normalized
+    float currentAirSetPoint = 0.0f;          // normalized
+    float targetO2SetPoint = 0.0f;            // normalized
+    float currentO2SetPoint = 0.0f;           // normalized
+    float targetCO2SetPoint = 0.0f;           // normalized
+    float currentCO2SetPoint = 0.0f;          // normalized
+    float targetAirFlow = 0.0f;               // in ml/min
+    dataPacket status;
+
+//    targetO2SetPoint = ((targetO2Concentration - 21)*targetSweepFlow)/10000; // normalized
+//
+//    targetO2SetPoint = (1/0.79)*((targetO2Concentration/100)-0.21)* (targetSweepFlow/100);  //normalized
+//
+//    targetAirSetPoint = (targetSweepFlow - (targetO2SetPoint*100))/100;
+
+    *targetSweep = 18*(*targetSweep)+0.1;
+    targetCO2SetPoint = *targetSweep;
+    //printf("CHECK CO@,%f\n", targetCO2SetPoint);
+    //targetCO2SetPoint = .1; x1 = .02, y1 = .5, x2 = 0.03, y2 = 0.7
+
 
 //    targetAirSetPoint = 0.01;
 //
@@ -340,25 +414,12 @@ error_type calculateSetPoint(float targetO2Concentration, float* targetSweep)
 //   while (targetCO2SetPoint != currentCO2SetPoint)
 //   {
        // read current setpoint (normalized)
-       SFC5500_SetSetpoint (NITROGEN, NORMALIZED,
-                            targetAirSetPoint, &status.state_error);
-
-       SFC5500_GetSetPoint (NITROGEN, NORMALIZED,
-                            &currentAirSetPoint, &status.state_error);
-
-       // read current setpoint (normalized)
-       SFC5500_SetSetpoint (OXYGEN, NORMALIZED,
-                            targetO2SetPoint, &status.state_error);
-
-       SFC5500_GetSetPoint (OXYGEN, NORMALIZED,
-                            &currentO2SetPoint, &status.state_error);
-
 //       printf("current Air setpoint is %.2f ml/min\n", currentSweepSetPoint* 10000.0f);
 
 //   }
 
        SFC5500_SetSetpoint (CO2, NORMALIZED,
-                         targetCO2SetPoint, &status.state_error);
+                            targetCO2SetPoint, &status.state_error);
 
        SFC5500_GetSetPoint (CO2, NORMALIZED,
                                  &currentCO2SetPoint, &status.state_error);

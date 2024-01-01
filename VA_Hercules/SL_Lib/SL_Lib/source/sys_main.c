@@ -74,9 +74,7 @@
 
 uint8   emacAddress[6U] =   {0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU};
 uint32  emacPhyAddress  =   0U;
-
-int main(void)
-{
+int main(void) {
 /* USER CODE BEGIN (3) */
     char string[]={};
     float targetO2Concentration = 37.00f;       // in mmHg
@@ -99,7 +97,7 @@ int main(void)
 //    float targetConcentration = 100.0f;       // in %
 //    float targetO2Concentration = 37.00f;       // in mmHg
     float targetCO2Concentration = 0.00f;      // in mmHg
-    float tEGCO2 = 20.00f;                     // in mmHg
+    float tEGCO2 = 20.00f;                    // in mmHg
 //    float measuredCO2Concentration = 0.00f;
     float current_time = 0;
 //    uint8_t co2_count = 0;
@@ -220,7 +218,18 @@ int main(void)
         pwmSetDuty(hetRAM1, pwm0, 15);
 
         //BRIAN CODE
+        int co2reg = 0;
+        //*co2Sweep = 0;
+        time_t startTime;
+        time(&startTime);
+        time_t clearTime;
+        time(&clearTime);
+        float co2Sweep = 0;
         while(1) {
+            time_t currTime;
+            time(&currTime);
+            float diffTime = (currTime-startTime);
+            printf("time,%f\n", diffTime);
             co2SensorInit();
             sciSetBaudrate (sciREG, 9600);
             CO2_sensor_init();
@@ -228,7 +237,49 @@ int main(void)
 //            measuredSweepFlow = (measuredAirFlow * 1.0f) + (measuredO2Flow * 1.0f) + (measuredCO2Flow * 1.0f);
             EGCO2 = get_CO2_val();
             float* tSweep = egco2PID(&EGCO2);
+            /*if(*tSweep <= EGCO2 * 0.016){
+                co2reg = 1;
+            }
+            else if(EGCO2 > 21){
+                co2reg = 0;
+                *co2Sweep = 0;
+            }
+            if(co2reg == 1){
+                co2Sweep = CO2PID(&EGCO2);
+                *tSweep = EGCO2 * 0.015;
+                if(*tSweep < 0.1){
+                    *tSweep = 0.1;
+                }
+            }
+            else{
+                *co2Sweep = 0;
+                co2Sweep = CO2PID(co2Sweep);
+            }*/
+//            if(currTime-clearTime > 600 && currTime-clearTime < 610){
+//                *tSweep = 5;
+//                *co2Sweep = 0;
+//                co2Sweep = CO2PID(co2Sweep);
+//            }
+//            else if(currTime-clearTime > 610){
+//                time(&clearTime);
+//            }
+            *tSweep = 4.0; //UNCOMMENT FOR FIXED SWEEP AND SET TO SWEEP VALUE
+//            *co2Sweep = 0;
+            //printf("PREtSweep,%f\n", *tSweep);
+//            printf("CHEDK tSweep,%f\n", *tSweep);
+//            if(*tSweep <= 1){
+//                co2Sweep = (1-*tSweep)*0.005;
+//                *tSweep=1-co2Sweep;
+//            }
+//            else{
+//                co2Sweep = 0;
+//            }
+            co2Sweep = 0;
+            printf("tSweep,%f\n", *tSweep);
+            printf("CO2Sweep,%f\n", co2Sweep);
             calculateSetPoint(37, tSweep);
+            calculateSetPointCO2(37, &co2Sweep);
+
         }
 
 ////        while (1) {

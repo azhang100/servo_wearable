@@ -34,6 +34,8 @@ error_type setpointUpdate(float targetConcentration, float targetFlow);
 
 error_type calculateSetPoint(float targetO2Concentration, float * targetSweepFlow);
 
+error_type calculateSetPointCO2(float targetO2Concentration, float * targetSweep);
+
 error_type measureCurrentFlows(float* flow1, float* flow2, float* flow3);
 
 #endif /* INCLUDE_SFC5500_COMMANDS_H_ */
